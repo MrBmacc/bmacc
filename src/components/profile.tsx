@@ -8,7 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { EditProfileDialog } from "./edit-profile-dialog";
 import { DeleteProfileDialog } from "./delete-profile-dialog";
-
+import { Card } from "@/components/ui/card";
 import { MoreHorizontal } from "lucide-react";
 
 import {
@@ -129,7 +129,7 @@ export function Profile() {
     address?.toLowerCase() === profile.wallet_address.toLowerCase();
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-2xl shadow-xl relative">
+    <Card className="max-w-2xl mx-auto p-6 bg-white rounded-2xl shadow-xl relative">
       <div className="absolute inset-x-0 -top-6 mx-auto flex justify-center max-w-xs">
         <div className="">
           <img
@@ -237,6 +237,6 @@ export function Profile() {
         onClose={() => setIsDeleteOpen(false)}
         onConfirm={handleProfileDelete}
       />
-    </div>
+    </Card>
   );
 }
