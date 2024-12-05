@@ -1,15 +1,18 @@
 import React from "react";
-import { useAccount } from "wagmi";
-import { Button } from "@/components/ui/button";
+
 import { Coffee, Search, UserPlus, ArrowRight } from "lucide-react";
 
-import landingPageBg from "@/assets/landing-page-image-alt.webp";
+import useStore from "@/stores/app.store";
+import landingPageBg from "@/assets/coffee-shop-2.png";
+import { useProfileStatus } from "@/hooks/use-profile-status";
+
+import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import ButtonCreateProfile from "@/components/button-create-profile";
+import { ButtonCreateProfile } from "@/components/button-create-profile";
 
 export function LandingPage() {
-  const { address } = useAccount();
-
+  const { setIsSearchOpen } = useStore();
+  const { isConnected, isLoading, hasProfile, profile } = useProfileStatus();
   return (
     <div className="relative flex flex-col min-h-[calc(100svh-12rem)] isolate">
       <img
@@ -30,18 +33,37 @@ export function LandingPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            {!address ? (
-              <ButtonCreateProfile />
-            ) : (
-              <Button asChild>
-                <a href="/create" className="">
+            {isLoading && (
+              <Button disabled={true} className="animate-pulse w-36">
+                Checking profile...
+              </Button>
+            )}
+
+            {!isLoading && !isConnected && <ButtonCreateProfile />}
+
+            {!isLoading && isConnected && !hasProfile && (
+              <Button className="w-36" asChild>
+                <a href="/create">
                   <UserPlus size={20} />
                   Create Profile
                 </a>
               </Button>
             )}
 
-            <Button variant="brand">
+            {!isLoading && isConnected && hasProfile && (
+              <Button className="w-36" asChild>
+                <a href={`/profile/${profile?.username}`} className="">
+                  <UserPlus size={20} />
+                  View Profile
+                </a>
+              </Button>
+            )}
+
+            <Button
+              variant="brand"
+              className="w-36"
+              onClick={() => setIsSearchOpen(true)}
+            >
               <Search size={20} />
               Find Creator
             </Button>
