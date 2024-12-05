@@ -34,7 +34,8 @@ createAppKit({
   projectId,
   metadata,
   features: {
-    analytics: true,
+    email: false,
+    socials: ["google", "github", "x"],
   },
 });
 
