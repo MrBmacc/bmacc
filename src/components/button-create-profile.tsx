@@ -6,7 +6,11 @@ import Google from "@/components/icons/google";
 import GitHub from "@/components/icons/github";
 import { ButtonModal } from "@/components/button-modal";
 
-const ButtonCreateProfile = () => {
+export const ButtonCreateProfile = ({
+  children,
+}: {
+  children?: React.ReactNode;
+}) => {
   const iconVariants = {
     animate: {
       y: [45, 51, 17, 17, -17, -17, -51, -51, -17, -17, 17, 17, 50],
@@ -31,18 +35,16 @@ const ButtonCreateProfile = () => {
       className="relative overflow-hidden flex items-center gap-3"
     >
       <motion.div
-        className="flex flex-col justify-start gap-4"
-        variants={iconVariants}
         animate="animate"
+        variants={iconVariants}
+        className="flex flex-col justify-start gap-4"
       >
         <UserPlus size={22} />
         <Google width={22} height={22} />
         <X width={22} height={22} />
         <GitHub width={22} height={22} />
       </motion.div>
-      <span>Create Profile</span>
+      {children || <span>Create Profile</span>}
     </ButtonModal>
   );
 };
-
-export default ButtonCreateProfile;

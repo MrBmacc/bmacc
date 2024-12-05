@@ -1,20 +1,25 @@
 import React from "react";
-import { useNavigate } from "@tanstack/react-router";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
-import { Separator } from "./ui/separator";
 import { useAccount } from "wagmi";
 import { ImagePlus, Loader2 } from "lucide-react";
-import { supabase, supabaseAdmin } from "@/lib/supabase";
+import { useNavigate } from "@tanstack/react-router";
+
 import { useToast } from "@/hooks/use-toast";
-import { Card, CardContent } from "./ui/card";
+import { useProfileStatus } from "@/hooks/use-profile-status";
+
+import { supabase, supabaseAdmin } from "@/lib/supabase";
+
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { Card, CardContent } from "@/components/ui/card";
+import { ButtonCreateProfile } from "@/components/button-create-profile";
 
 export function CreateProfile() {
   const navigate = useNavigate();
-  const { address, isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
+  const { isLoading, hasProfile, profile } = useProfileStatus();
   const { toast } = useToast();
-  const [isChecking, setIsChecking] = React.useState(true);
   const [formData, setFormData] = React.useState({
     username: "",
     bio: "",
@@ -24,37 +29,19 @@ export function CreateProfile() {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
-  // Check if user already has a profile
+  // Redirect if user already has a profile
   React.useEffect(() => {
-    async function checkExistingProfile() {
-      if (!address) return;
-
-      try {
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("username")
-          .eq("wallet_address", address.toLowerCase())
-          .single();
-
-        if (profile) {
-          toast({
-            title: "Profile Exists",
-            description: "Redirecting to your profile...",
-          });
-          navigate({
-            to: "/profile/$username",
-            params: { username: profile.username },
-          });
-        }
-      } catch (error) {
-        // No profile found, allow creation
-      } finally {
-        setIsChecking(false);
-      }
+    if (hasProfile && profile) {
+      toast({
+        title: "Profile Exists",
+        description: "Redirecting to your profile...",
+      });
+      navigate({
+        to: "/profile/$username",
+        params: { username: profile.username },
+      });
     }
-
-    checkExistingProfile();
-  }, [address, navigate, toast]);
+  }, [hasProfile, profile, navigate, toast]);
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -111,6 +98,15 @@ export function CreateProfile() {
         return;
       }
 
+      if (formData.username.includes("@")) {
+        toast({
+          title: "Invalid username",
+          description: "Please do not include the @ symbol",
+          variant: "destructive",
+        });
+        return;
+      }
+
       // Insert profile data
       const { error } = await supabase.from("profiles").insert({
         username: formData.username,
@@ -146,19 +142,23 @@ export function CreateProfile() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] p-4">
         <div className="w-full max-w-md space-y-4 text-center">
-          <h2 className="text-2xl font-bold tracking-tight">Connect Wallet</h2>
-          <p className="text-gray-500">
-            Connect your wallet to create your profile
-          </p>
-          <div className="pt-4">
-            <w3m-button />
+          <div className="pt-4 flex justify-center">
+            <ButtonCreateProfile>
+              <h2 className="text-2xl font-bold tracking-tight">
+                Sign in to continue
+              </h2>
+            </ButtonCreateProfile>
           </div>
+          <p className="text-gray-500 text-balance">
+            You can connect with your wallet or sign in with Google, GitHub or
+            X.
+          </p>
         </div>
       </div>
     );
   }
 
-  if (isChecking) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
@@ -241,6 +241,13 @@ export function CreateProfile() {
                     }
                     required
                   />
+                  <p className="text-sm text-gray-500">
+                    This will be your username and will be used to identify you
+                    on the platform.
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    Do not include the @ symbol.
+                  </p>
                 </div>
 
                 <div className="space-y-2">
