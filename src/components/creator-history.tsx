@@ -18,16 +18,13 @@ export const CreatorHistory = ({ profile }: { profile: Profile }) => {
 
   return (
     <div className="flex flex-col gap-4">
-      {tips.USDC.formatted > 0 && (
-        <span className="text-sm text-gray-500">
-          {tips.USDC.formatted} USDC
-        </span>
-      )}
-      {tips.USDT.formatted > 0 && (
-        <span className="text-sm text-gray-500">
-          {tips.USDT.formatted} USDT
-        </span>
-      )}
+      <span className="text-sm text-gray-500">
+        {tips.USDC.formatted || 0} USDC
+      </span>
+
+      <span className="text-sm text-gray-500">
+        {tips.USDT.formatted || 0} USDT
+      </span>
     </div>
   );
 };
