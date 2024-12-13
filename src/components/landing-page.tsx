@@ -32,7 +32,7 @@ export function LandingPage() {
             with cryptocurrency tips on Base
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-row gap-4 justify-center">
             {isLoading && (
               <Button disabled={true} className="animate-pulse w-36">
                 Checking profile...

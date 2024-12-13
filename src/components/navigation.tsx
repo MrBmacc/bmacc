@@ -1,5 +1,5 @@
 import { useDisconnect } from "wagmi";
-import { Search, User2, UserPlus } from "lucide-react";
+import { Search, User2, UserPlus, LogOut } from "lucide-react";
 
 import useStore from "@/stores/app.store";
 import { useProfileStatus } from "@/hooks/use-profile-status";
@@ -20,7 +20,7 @@ export function Navigation() {
             <img alt="BMACC" className="w-8 h-8" src="/images/bmacc-logo.svg" />
             <span className="ml-2 text-xl font-bold text-gray-800">BMACC</span>
           </a>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center gap-2">
             <Button variant="ghost" onClick={() => setIsSearchOpen(true)}>
               <Search size={20} />
               <span className="sr-only">Find Creator</span>
@@ -28,6 +28,7 @@ export function Navigation() {
 
             {!isConnected && !hasProfile && (
               <ButtonModal
+                size="icon"
                 variant="ghost"
                 screen="Connect"
                 className="relative overflow-hidden flex items-center gap-3"
@@ -37,7 +38,7 @@ export function Navigation() {
             )}
 
             {isConnected && hasProfile && (
-              <Button asChild variant="ghost">
+              <Button asChild variant="ghost" size="icon">
                 <a href={`/profile/${profile?.username}`}>
                   <User2 size={20} />
                 </a>
@@ -45,7 +46,7 @@ export function Navigation() {
             )}
 
             {isConnected && !hasProfile && (
-              <Button asChild variant="ghost">
+              <Button asChild variant="ghost" size="icon">
                 <a href="/create">
                   <UserPlus size={20} />
                 </a>
@@ -53,8 +54,9 @@ export function Navigation() {
             )}
 
             {isConnected && (
-              <Button variant="ghost" onClick={() => disconnect()}>
-                Disconnect
+              <Button variant="ghost" size="icon" onClick={() => disconnect()}>
+                <LogOut size={20} />
+                <span className="sr-only">Disconnect</span>
               </Button>
             )}
           </div>
