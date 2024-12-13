@@ -204,9 +204,9 @@ export function CreateProfile() {
                     className="hidden"
                   />
                   <Button
+                    size="sm"
                     type="button"
                     variant="outline"
-                    size="sm"
                     className="absolute bottom-0 right-0"
                     onClick={() => fileInputRef.current?.click()}
                     disabled={isUploading}

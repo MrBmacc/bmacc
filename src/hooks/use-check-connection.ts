@@ -1,6 +1,6 @@
+import { useAppKit } from "@reown/appkit/react";
+import { useAccount, useSwitchChain } from "wagmi";
 import { useState, useCallback, useEffect } from "react";
-import { useWeb3Modal } from "@web3modal/wagmi/react";
-import { useAccount, useSwitchNetwork, useNetwork } from "wagmi";
 
 type UseConnectionCheckReturn = {
   executeWithConnectionCheck: (fn: () => void) => Promise<void>;
@@ -10,10 +10,10 @@ type UseConnectionCheckReturn = {
 export const useConnectionCheck = ({
   desiredChainId,
 }: { desiredChainId?: number } = {}): UseConnectionCheckReturn => {
-  const { chain } = useNetwork();
-  const { open } = useWeb3Modal();
-  const { isConnected } = useAccount();
-  const { switchNetworkAsync } = useSwitchNetwork();
+  const { open } = useAppKit();
+
+  const { isConnected, chainId } = useAccount();
+  const { switchChainAsync } = useSwitchChain();
   const [isConnecting, setIsConnecting] = useState(false);
   const [pendingFunction, setPendingFunction] = useState<(() => void) | null>(
     null
@@ -31,9 +31,9 @@ export const useConnectionCheck = ({
   const executeWithConnectionCheck = useCallback(
     async (fn: () => void) => {
       if (isConnected) {
-        if (desiredChainId && chain?.id !== desiredChainId) {
+        if (desiredChainId && chainId !== desiredChainId) {
           try {
-            await switchNetworkAsync?.(desiredChainId);
+            await switchChainAsync?.({ chainId: desiredChainId });
           } catch (error) {
             console.error("Failed to switch network:", error);
             return;
@@ -53,7 +53,7 @@ export const useConnectionCheck = ({
         setPendingFunction(null);
       }
     },
-    [isConnected, desiredChainId, chain?.id, switchNetworkAsync, open]
+    [isConnected, desiredChainId, chainId, switchChainAsync, open]
   );
 
   return { executeWithConnectionCheck, isConnecting };

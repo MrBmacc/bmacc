@@ -1,15 +1,21 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
-import { Coffee, Share2, Copy, Loader2, Pencil, Trash2 } from "lucide-react";
+import {
+  Copy,
+  Coffee,
+  Loader2,
+  Pencil,
+  Trash2,
+  Wallet2,
+  MoreHorizontal,
+} from "lucide-react";
 import { useAccount } from "wagmi";
 import { useParams, useNavigate } from "@tanstack/react-router";
 import { supabase, type Profile as ProfileType } from "@/lib/supabase";
+
+import { toUrlFriendly } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
-import { Button } from "@/components/ui/button";
-import { EditProfileDialog } from "./edit-profile-dialog";
-import { DeleteProfileDialog } from "./delete-profile-dialog";
-import { Card } from "@/components/ui/card";
-import { MoreHorizontal } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 
 import {
   DropdownMenu,
@@ -17,35 +23,35 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuPortal,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+
+import { CreatorHistory } from "@/components/creator-history";
+import { EditProfileDialog } from "@/components/edit-profile-dialog";
+import { DeleteProfileDialog } from "@/components/delete-profile-dialog";
+import { ButtonCopyClipboard } from "@/components/button-copy-clipboard";
+
+import { truncateAddress } from "@/utils/truncate-address";
 
 export function ProfilePage() {
   const { username } = useParams({ from: "/profile/$username" });
   const { address, isConnected } = useAccount();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [profile, setProfile] = React.useState<ProfileType | null>(null);
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [copied, setCopied] = React.useState(false);
-  const [isEditOpen, setIsEditOpen] = React.useState(false);
-  const [isDeleteOpen, setIsDeleteOpen] = React.useState(false);
+  const [profile, setProfile] = useState<ProfileType | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const profileUrl = `${window.location.origin}/tip/${username}`;
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const profileUrl = `${window.location.origin}/tip/${toUrlFriendly(username)}`;
 
-  const copyToClipboard = async () => {
-    await navigator.clipboard.writeText(profileUrl);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  React.useEffect(() => {
+  useEffect(() => {
     async function fetchProfile() {
       try {
         const { data, error } = await supabase
@@ -129,9 +135,9 @@ export function ProfilePage() {
     address?.toLowerCase() === profile.wallet_address.toLowerCase();
 
   return (
-    <Card className="max-w-2xl mx-auto p-6 bg-white rounded-2xl shadow-xl relative animate-in slide-in-from-top">
+    <Card className="max-w-2xl mx-auto p-6 bg-white rounded-2xl shadow-xl relative animate-in slide-in-from-top ease-in-out">
       <div className="absolute inset-x-0 -top-6 mx-auto flex justify-center max-w-xs">
-        <div className="relative">
+        <div className="relative animate-in zoom-in delay-100 fill-mode-both ease-in-out">
           <img
             src={
               profile.image_url ||
@@ -191,37 +197,47 @@ export function ProfilePage() {
       </div>
 
       <div className="flex justify-center gap-6 mb-6">
-        <Button className="flex items-center space-x-2">
-          <Share2 size={18} />
-          <span>Share Profile</span>
-        </Button>
-
-        <Button onClick={copyToClipboard}>
-          {copied ? (
-            <span className="text-green-600">Copied!</span>
-          ) : (
-            <>
-              <Copy size={18} className="mr-2" />
-              <span>Copy Link</span>
-            </>
-          )}
-        </Button>
+        <ButtonCopyClipboard text={profileUrl}>
+          <Copy size={18} className="mr-2" />
+          <span>Copy Link</span>
+        </ButtonCopyClipboard>
       </div>
 
       {isOwner && (
-        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-          <div className="flex items-center space-x-3">
-            <Coffee className="text-amber-600" />
-            <span className="font-medium">Total Tips Received</span>
+        <>
+          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+            <div className="flex items-center space-x-3">
+              <Coffee className="text-amber-600" />
+              <span className="font-medium">Total Tips Received</span>
+            </div>
+            <CreatorHistory profile={profile} />
           </div>
-          <span className="text-lg font-bold">0.5 ETH</span>
-        </div>
+
+          <Alert className="bg-gray-50 my-4">
+            <div className="flex items-center gap-1">
+              <Wallet2 className="h-4 w-4" />
+              <AlertTitle className="mb-0">Heads up!</AlertTitle>
+            </div>
+            <AlertDescription className="text-sm my-1">
+              Tips are sent to the wallet associated with your account:{" "}
+              <ButtonCopyClipboard
+                text={profile.wallet_address}
+                variant="ghost"
+                size="sm"
+              >
+                {truncateAddress(profile.wallet_address)}
+              </ButtonCopyClipboard>
+            </AlertDescription>
+          </Alert>
+        </>
       )}
 
       {!isOwner && (
-        <Button className="w-full py-6 text-lg">
-          <Coffee className="mr-2" />
-          Buy me a coffee
+        <Button asChild className="w-full py-6 text-lg">
+          <Link to="/tip/$username" params={{ username: profile.username }}>
+            <Coffee className="mr-2" />
+            Buy me a coffee
+          </Link>
         </Button>
       )}
 

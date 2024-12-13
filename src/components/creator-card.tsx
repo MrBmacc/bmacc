@@ -3,8 +3,8 @@ import { useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { ButtonTip } from "@/components/button-tip";
 
+import { toUrlFriendly } from "@/lib/utils";
 import type { Profile } from "@/lib/supabase";
-
 interface CreatorCardProps {
   creator: Profile;
   onClose?: () => void;
@@ -16,7 +16,7 @@ export function CreatorCard({ creator, onClose }: CreatorCardProps) {
   const handleViewProfile = () => {
     navigate({
       to: "/profile/$username",
-      params: { username: creator.username },
+      params: { username: toUrlFriendly(creator.username) },
     });
     onClose?.();
   };
