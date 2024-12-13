@@ -17,7 +17,7 @@ export function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <a href="/" className="flex items-center">
-            <img alt="BMACC" className="w-8 h-8" src="/images/bmacc-logo.svg" />
+            <img alt="BMACC" className="w-8 h-8" src="/images/bmacc-logo.png" />
             <span className="ml-2 text-xl font-bold text-gray-800">BMACC</span>
           </a>
           <div className="flex items-center gap-2">
