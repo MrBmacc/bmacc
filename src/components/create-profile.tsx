@@ -6,6 +6,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useToast } from "@/hooks/use-toast";
 import { useProfileStatus } from "@/hooks/use-profile-status";
 
+import { toUrlFriendly } from "@/lib/utils";
 import { supabase, supabaseAdmin } from "@/lib/supabase";
 
 import { Label } from "@/components/ui/label";
@@ -82,17 +83,24 @@ export function CreateProfile() {
 
     setIsSubmitting(true);
     try {
-      // Check if username is available
+      // Check if username or wallet address is already in use
       const { data: existingUser } = await supabase
         .from("profiles")
         .select()
-        .eq("username", formData.username)
+        .or(
+          `username.eq.${formData.username},wallet_address.eq.${address.toLowerCase()}`
+        )
         .single();
 
       if (existingUser) {
+        const errorMessage =
+          existingUser.username === formData.username
+            ? "Username is already taken"
+            : "Wallet address already has a profile";
+
         toast({
-          title: "Username taken",
-          description: "Please choose a different username",
+          title: "Profile exists",
+          description: errorMessage,
           variant: "destructive",
         });
         return;
@@ -109,9 +117,10 @@ export function CreateProfile() {
 
       // Insert profile data
       const { error } = await supabase.from("profiles").insert({
-        username: formData.username,
         bio: formData.bio,
+        username: formData.username,
         image_url: formData.imageUrl,
+        slug: toUrlFriendly(formData.username),
         wallet_address: address.toLowerCase(),
       });
 
@@ -130,8 +139,8 @@ export function CreateProfile() {
       console.error("Error creating profile:", error);
       toast({
         title: "Error",
-        description: "Failed to create profile. Please try again.",
         variant: "destructive",
+        description: "Failed to create profile. Please try again.",
       });
     } finally {
       setIsSubmitting(false);

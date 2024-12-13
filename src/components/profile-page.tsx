@@ -57,7 +57,7 @@ export function ProfilePage() {
         const { data, error } = await supabase
           .from("profiles")
           .select()
-          .eq("username", username)
+          .eq("slug", toUrlFriendly(username))
           .single();
 
         if (error) throw error;

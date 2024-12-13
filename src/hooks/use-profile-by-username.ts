@@ -5,6 +5,7 @@ import type { Address } from "viem";
 type Profile = {
   username: string;
   bio: string;
+  slug: string;
   image_url: string;
   wallet_address: Address;
 };
