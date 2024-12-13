@@ -6,8 +6,6 @@ import { useLoaderData } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
 import { parseUnits } from "viem";
 
-import { useProfileByUsername } from "@/hooks/use-profile-by-username";
-
 import { tipAmounts, currencies } from "@/config/constants";
 
 import { fromUrlFriendly } from "@/lib/utils";
@@ -15,6 +13,7 @@ import { fromUrlFriendly } from "@/lib/utils";
 import { useApproveSpend } from "@/hooks/use-approve-spend";
 import { useSendTokenTip } from "@/hooks/use-send-token-tip";
 import { useApprovalCheck } from "@/hooks/use-approval-check";
+import { useProfileBySlug } from "@/hooks/use-profile-by-slug";
 import { useConnectionCheck } from "@/hooks/use-check-connection";
 
 export function Tip() {
@@ -23,14 +22,14 @@ export function Tip() {
   const [selectedCurrency, setSelectedCurrency] = useState(currencies[0]);
   const [selectedAmount, setSelectedAmount] = useState(tipAmounts[0].amount);
 
-  const { username } = useLoaderData({ from: "/tip/$username" });
+  const { slug } = useLoaderData({ from: "/tip/$slug" });
 
   const { executeWithConnectionCheck } = useConnectionCheck({
     desiredChainId: 8453,
   });
 
   // Get the recipient address from the database
-  const { isLoading, profile, error } = useProfileByUsername(username);
+  const { isLoading, profile, error } = useProfileBySlug(slug);
 
   // Check spending limit, approval required?
   const { needsApproval } = useApprovalCheck({
@@ -148,8 +147,8 @@ export function Tip() {
 
       <Link
         className="text-sm text-muted-foreground text-center block my-2"
-        to="/profile/$username"
-        params={{ username: profile.username }}
+        to="/profile/$slug"
+        params={{ slug: profile.slug }}
       >
         View Profile
       </Link>

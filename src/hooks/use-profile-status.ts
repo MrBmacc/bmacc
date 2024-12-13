@@ -2,16 +2,13 @@ import { useState, useEffect } from "react";
 import { useAccount } from "wagmi";
 import { supabase } from "@/lib/supabase";
 
+import type { Profile } from "@/lib/supabase";
+
 type ProfileStatus = {
   isConnected: boolean;
   isLoading: boolean;
   hasProfile: boolean;
-  profile: {
-    username: string;
-    bio: string;
-    image_url: string;
-    wallet_address: string;
-  } | null;
+  profile: Profile | null;
   isAuthenticated: boolean;
 };
 

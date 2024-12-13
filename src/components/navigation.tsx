@@ -39,7 +39,7 @@ export function Navigation() {
 
             {isConnected && hasProfile && (
               <Button asChild variant="ghost" size="icon">
-                <a href={`/profile/${profile?.username}`}>
+                <a href={`/profile/${profile?.slug}`}>
                   <User2 size={20} />
                 </a>
               </Button>

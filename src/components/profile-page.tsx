@@ -40,7 +40,7 @@ import { ButtonCopyClipboard } from "@/components/button-copy-clipboard";
 import { truncateAddress } from "@/utils/truncate-address";
 
 export function ProfilePage() {
-  const { username } = useParams({ from: "/profile/$username" });
+  const { slug } = useParams({ from: "/profile/$slug" });
   const { address, isConnected } = useAccount();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -49,7 +49,7 @@ export function ProfilePage() {
 
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-  const profileUrl = `${window.location.origin}/tip/${toUrlFriendly(username)}`;
+  const profileUrl = `${window.location.origin}/tip/${toUrlFriendly(slug)}`;
 
   useEffect(() => {
     async function fetchProfile() {
@@ -57,7 +57,7 @@ export function ProfilePage() {
         const { data, error } = await supabase
           .from("profiles")
           .select()
-          .eq("slug", toUrlFriendly(username))
+          .eq("slug", slug)
           .single();
 
         if (error) throw error;
@@ -75,7 +75,7 @@ export function ProfilePage() {
     }
 
     fetchProfile();
-  }, [username, toast]);
+  }, [slug, toast]);
 
   const handleProfileUpdate = (updatedProfile: ProfileType) => {
     setProfile(updatedProfile);
@@ -237,7 +237,7 @@ export function ProfilePage() {
 
       {!isOwner && (
         <Button asChild className="w-full py-6 text-lg">
-          <Link to="/tip/$username" params={{ username: profile.username }}>
+          <Link to="/tip/$slug">
             <Coffee className="mr-2" />
             Buy me a coffee
           </Link>

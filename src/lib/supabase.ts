@@ -28,6 +28,7 @@ export type Profile = {
   id: string;
   username: string;
   bio: string;
+  slug: string;
   image_url: string;
   wallet_address: string;
   created_at: string;

@@ -1,17 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Tip } from "@/components/tip-page";
 
-export const Route = createFileRoute("/tip/$username")({
+export const Route = createFileRoute("/tip/$slug")({
   component: Tip,
   beforeLoad: ({ params }) => {
     return {
-      username: params.username,
+      slug: params.slug,
     };
   },
   loader: ({ context }) => {
     // Access the transformed data from beforeLoad
     return {
-      username: context.username,
+      slug: context.slug,
     };
   },
 });

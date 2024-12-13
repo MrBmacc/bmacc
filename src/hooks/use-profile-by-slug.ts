@@ -16,9 +16,7 @@ type ProfileByUsernameStatus = {
   error: Error | null;
 };
 
-export function useProfileByUsername(
-  username: string
-): ProfileByUsernameStatus {
+export function useProfileBySlug(slug: string): ProfileByUsernameStatus {
   const [state, setState] = useState<ProfileByUsernameStatus>({
     isLoading: true,
     profile: null,
@@ -27,7 +25,7 @@ export function useProfileByUsername(
 
   const fetchProfile = useMemo(
     () => async () => {
-      if (!username) {
+      if (!slug) {
         setState((prev) => ({ ...prev, isLoading: false }));
         return;
       }
@@ -36,7 +34,7 @@ export function useProfileByUsername(
         const { data, error: supabaseError } = await supabase
           .from("profiles")
           .select()
-          .eq("username", username)
+          .eq("slug", slug)
           .single();
 
         if (supabaseError) throw new Error(supabaseError.message);
@@ -50,7 +48,7 @@ export function useProfileByUsername(
         });
       }
     },
-    [username]
+    [slug]
   );
 
   useEffect(() => {
