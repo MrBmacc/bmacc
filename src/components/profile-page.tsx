@@ -184,8 +184,11 @@ export function ProfilePage() {
 
       <div className="flex flex-col gap-2 justify-center items-center mt-20 mb-10">
         <h1 className="text-2xl font-bold text-gray-800">
-          {profile.username}'s Profile
+          {isOwner
+            ? `Your Profile (${profile.username})`
+            : `${profile.username}'s`}
         </h1>
+
         <p className="text-gray-600 text-balance">{profile.bio}</p>
       </div>
 

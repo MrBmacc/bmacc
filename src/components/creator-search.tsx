@@ -25,9 +25,31 @@ export function CreatorSearch() {
   const { isSearchOpen, setIsSearchOpen } = useStore();
 
   React.useEffect(() => {
+    const loadInitialResults = async () => {
+      setIsLoading(true);
+      try {
+        const creators = await searchCreators("*");
+        setResults(creators);
+      } catch (error) {
+        console.error("Initial load error:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load creators. Please try again.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (isSearchOpen) {
+      loadInitialResults();
+    }
+  }, [isSearchOpen, toast]);
+
+  React.useEffect(() => {
     const searchTimeout = setTimeout(async () => {
       if (!searchTerm) {
-        setResults([]);
         return;
       }
 
@@ -52,7 +74,7 @@ export function CreatorSearch() {
 
   return (
     <Dialog open={isSearchOpen} onOpenChange={setIsSearchOpen}>
-      <DialogContent className="sm:max-w-2xl">
+      <DialogContent className="sm:max-w-2xl md:h-[calc(50svh)] h-svh w-svw flex flex-col bg-white/90 backdrop-blur-sm">
         <DialogHeader>
           <DialogTitle>Find Creator</DialogTitle>
         </DialogHeader>
@@ -63,7 +85,7 @@ export function CreatorSearch() {
           placeholder="Search by username or bio..."
         />
 
-        <div className="max-h-[60vh] overflow-y-auto">
+        <div className="sm:max-h-[80svh] overflow-y-auto">
           <SearchResults
             results={results}
             isLoading={isLoading}
