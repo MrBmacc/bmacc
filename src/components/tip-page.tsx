@@ -16,6 +16,9 @@ import { useApprovalCheck } from "@/hooks/use-approval-check";
 import { useProfileBySlug } from "@/hooks/use-profile-by-slug";
 import { useConnectionCheck } from "@/hooks/use-check-connection";
 
+import { CreatorHeader } from "@/components/creator-header";
+import { Card } from "./ui/card";
+
 export function Tip() {
   const [isPending, setIsPending] = useState(false);
 
@@ -49,7 +52,7 @@ export function Tip() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-teal-300" />
       </div>
     );
   }
@@ -86,15 +89,10 @@ export function Tip() {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded-2xl shadow-xl p-6 z-10 relative">
-      <div className="text-center mb-6">
-        <Coffee className="mx-auto text-amber-600 mb-2" size={32} />
+    <Card className="max-w-md mx-auto rounded-2xl shadow-xl p-6 z-10 relative">
+      <CreatorHeader profile={profile} />
+      <div className="text-center mb-6 mt-16">
         <h2 className="text-2xl font-bold text-gray-800">Buy me a coffee</h2>
-        <p className="text-gray-600">
-          Support{" "}
-          <span className="underline">{fromUrlFriendly(profile.username)}</span>
-          . Show love with crypto!
-        </p>
       </div>
 
       <div className="mb-6">
@@ -108,8 +106,8 @@ export function Tip() {
               onClick={() => setSelectedCurrency(currency)}
               className={`p-2 rounded-lg border-2 transition-all ${
                 selectedCurrency.symbol === currency.symbol
-                  ? "border-blue-600 bg-blue-50"
-                  : "border-gray-200 hover:border-blue-400"
+                  ? "border-teal-300 bg-teal-50"
+                  : "border-gray-200 hover:border-teal-400"
               }`}
             >
               {currency.symbol}
@@ -133,8 +131,8 @@ export function Tip() {
             onClick={() => setSelectedAmount(amount)}
             className={`w-full p-4 rounded-lg border-2 transition-all ${
               selectedAmount === amount
-                ? "border-blue-600 bg-blue-50"
-                : "border-gray-200 hover:border-blue-400"
+                ? "border-teal-300 bg-teal-50"
+                : "border-gray-200 hover:border-teal-400"
             }`}
           >
             <div className="flex justify-between items-center">
@@ -164,6 +162,6 @@ export function Tip() {
       >
         View Profile
       </Link>
-    </div>
+    </Card>
   );
 }

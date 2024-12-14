@@ -1,14 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { supabase } from "@/lib/supabase";
-import type { Address } from "viem";
 
-type Profile = {
-  username: string;
-  bio: string;
-  slug: string;
-  image_url: string;
-  wallet_address: Address;
-};
+import type { Profile } from "@/lib/supabase";
 
 type ProfileByUsernameStatus = {
   isLoading: boolean;
