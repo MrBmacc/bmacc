@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Coffee } from "lucide-react";
+import { Coffee, Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { useLoaderData } from "@tanstack/react-router";
@@ -47,7 +47,11 @@ export function Tip() {
   const { sendTip } = useSendTokenTip();
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+      </div>
+    );
   }
 
   // TODO: An actual 404 would be nice
