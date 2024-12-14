@@ -86,7 +86,7 @@ export function Tip() {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded-2xl shadow-xl p-6">
+    <div className="max-w-md mx-auto bg-white rounded-2xl shadow-xl p-6 z-10 relative">
       <div className="text-center mb-6">
         <Coffee className="mx-auto text-amber-600 mb-2" size={32} />
         <h2 className="text-2xl font-bold text-gray-800">Buy me a coffee</h2>
@@ -115,6 +115,14 @@ export function Tip() {
               {currency.symbol}
             </button>
           ))}
+          <div className="relative">
+            <button disabled className="p-2 rounded-lg border-2 w-full">
+              BMACC
+            </button>
+            <span className="absolute -top-2 -right-2 bg-teal-300 text-zinc-600 rounded-full px-2 py-1 text-xs">
+              Soon
+            </span>
+          </div>
         </div>
       </div>
 
