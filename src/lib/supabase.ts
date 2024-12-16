@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import type { Address } from "viem";
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -30,6 +31,6 @@ export type Profile = {
   bio: string;
   slug: string;
   image_url: string;
-  wallet_address: string;
+  wallet_address: Address;
   created_at: string;
 };

@@ -17,14 +17,21 @@ export const CreatorHistory = ({ profile }: { profile: Profile }) => {
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <span className="text-sm text-gray-500">
-        {tips.USDC.formatted || 0} USDC
-      </span>
+    <div className="flex flex-col w-full divide-y divide-gray-200">
+      <div className="text-sm text-gray-500 flex items-center justify-between w-full py-2">
+        <p>USDC</p>
+        {tips.USDC.formatted || 0}
+      </div>
 
-      <span className="text-sm text-gray-500">
-        {tips.USDT.formatted || 0} USDT
-      </span>
+      <div className="text-sm text-gray-500 flex items-center justify-between w-full py-2">
+        <p>USDT</p>
+        {tips.USDT.formatted || 0}
+      </div>
+
+      <div className="text-sm text-gray-500 flex items-center justify-between w-full py-2">
+        <p>BMACC</p>
+        {tips.BMACC.formatted || 0}
+      </div>
     </div>
   );
 };

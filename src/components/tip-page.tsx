@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Coffee, Loader2 } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { useLoaderData } from "@tanstack/react-router";
@@ -7,8 +7,6 @@ import { Link } from "@tanstack/react-router";
 import { parseUnits } from "viem";
 
 import { tipAmounts, currencies } from "@/config/constants";
-
-import { fromUrlFriendly } from "@/lib/utils";
 
 import { useApproveSpend } from "@/hooks/use-approve-spend";
 import { useSendTokenTip } from "@/hooks/use-send-token-tip";
@@ -47,7 +45,11 @@ export function Tip() {
     decimals: selectedCurrency.decimals,
   });
 
-  const { sendTip } = useSendTokenTip();
+  const { sendTip, error: sendTipError } = useSendTokenTip();
+
+  useEffect(() => {
+    setIsPending(false);
+  }, [sendTipError]);
 
   if (isLoading) {
     return (
@@ -69,19 +71,34 @@ export function Tip() {
     // Update to proceed with tip
     executeWithConnectionCheck(async () => {
       if (needsApproval) {
-        // Maybe return a promise so we can proceed with tip after approval
-        triggerApprove();
-        return;
+        try {
+          const hash = await triggerApprove();
+          console.log("approvalTx", hash);
+          // hash is the transaction hash
+          // you can wait for transaction receipt if needed
+        } catch (error) {
+          // Handle error
+          console.error("Approval error:", error);
+          setIsPending(false);
+          return;
+        }
       }
 
-      const tx = await sendTip(
-        selectedCurrency.address,
-        profile.wallet_address,
-        parseUnits(selectedAmount, selectedCurrency.decimals)
-      );
+      try {
+        const tx = await sendTip(
+          selectedCurrency.address,
+          profile.wallet_address,
+          parseUnits(selectedAmount, selectedCurrency.decimals)
+        );
 
-      // TODO: Implement tip success
-      console.log("tx", tx);
+        // TODO: Implement tip success
+        console.log("tx", tx);
+      } catch (error) {
+        // Handle error
+        console.error("Transaction error:", error);
+        setIsPending(false);
+        return;
+      }
 
       // Implementation for sending tip transaction
       // This is a placeholder - you'll need to implement the actual contract interaction
@@ -113,14 +130,6 @@ export function Tip() {
               {currency.symbol}
             </button>
           ))}
-          <div className="relative">
-            <button disabled className="p-2 rounded-lg border-2 w-full">
-              BMACC
-            </button>
-            <span className="absolute -top-2 -right-2 bg-teal-300 text-zinc-600 rounded-full px-2 py-1 text-xs">
-              Soon
-            </span>
-          </div>
         </div>
       </div>
 

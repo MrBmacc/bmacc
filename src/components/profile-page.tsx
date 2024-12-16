@@ -135,7 +135,7 @@ export function ProfilePage() {
     address?.toLowerCase() === profile.wallet_address.toLowerCase();
 
   return (
-    <Card className="max-w-2xl mx-auto p-6 bg-white rounded-2xl shadow-xl relative animate-in slide-in-from-top ease-in-out z-10">
+    <Card className="max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-xl relative animate-in slide-in-from-top ease-in-out z-10">
       <CreatorHeader profile={profile} />
       {isOwner && (
         <DropdownMenu>
@@ -174,7 +174,7 @@ export function ProfilePage() {
             : `${profile.username}'s`}
         </h1>
 
-        <p className="text-gray-600 text-balance">{profile.bio}</p>
+        <p className="text-gray-600 text-balance text-center">{profile.bio}</p>
       </div>
 
       <div className="bg-gradient-to-r from-purple-50 to-blue-50 p-4 rounded-xl mb-6">
@@ -193,7 +193,7 @@ export function ProfilePage() {
 
       {isOwner && (
         <>
-          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+          <div className="flex flex-col items-center justify-between p-4 bg-gray-50 rounded-lg">
             <div className="flex items-center space-x-3">
               <Coffee className="text-amber-600" />
               <span className="font-medium">Total Tips Received</span>
@@ -222,7 +222,7 @@ export function ProfilePage() {
 
       {!isOwner && (
         <Button asChild className="w-full py-6 text-lg">
-          <Link to="/tip/$slug">
+          <Link to="/tip/$slug" params={{ slug }}>
             <Coffee className="mr-2" />
             Buy me a coffee
           </Link>

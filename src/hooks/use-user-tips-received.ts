@@ -11,6 +11,10 @@ export function useUserTipsReceived(userAddress: Address) {
     address: cryptoTippingAddress,
   };
 
+  const usdcCurrency = currencies.find((c) => c.symbol === "USDC");
+  const usdtCurrency = currencies.find((c) => c.symbol === "USDT");
+  const bmaccCurrency = currencies.find((c) => c.symbol === "BMACC");
+
   const {
     data: usdcTips,
     isPending: isUsdcPending,
@@ -18,7 +22,7 @@ export function useUserTipsReceived(userAddress: Address) {
   } = useReadContract({
     ...cryptoTippingContract,
     functionName: "tipsReceived",
-    args: [userAddress, currencies[0].address],
+    args: [userAddress, usdcCurrency?.address],
   });
 
   const {
@@ -28,7 +32,17 @@ export function useUserTipsReceived(userAddress: Address) {
   } = useReadContract({
     ...cryptoTippingContract,
     functionName: "tipsReceived",
-    args: [userAddress, currencies[1].address],
+    args: [userAddress, usdtCurrency?.address],
+  });
+
+  const {
+    data: bmaccTips,
+    isPending: isbmaccPending,
+    error: bmaccError,
+  } = useReadContract({
+    ...cryptoTippingContract,
+    functionName: "tipsReceived",
+    args: [userAddress, bmaccCurrency?.address],
   });
 
   return {
@@ -36,17 +50,23 @@ export function useUserTipsReceived(userAddress: Address) {
       USDC: {
         amount: usdcTips,
         formatted: usdcTips
-          ? Number(usdcTips) / 10 ** currencies[0].decimals
+          ? Number(usdcTips) / 10 ** usdcCurrency?.decimals
           : 0,
       },
       USDT: {
         amount: usdtTips,
         formatted: usdtTips
-          ? Number(usdtTips) / 10 ** currencies[1].decimals
+          ? Number(usdtTips) / 10 ** usdtCurrency?.decimals
+          : 0,
+      },
+      BMACC: {
+        amount: bmaccTips,
+        formatted: bmaccTips
+          ? Number(bmaccTips) / 10 ** bmaccCurrency?.decimals
           : 0,
       },
     },
-    isHistoryError: usdcError || usdtError,
-    isHistoryLoading: isUsdcPending || isUsdtPending,
+    isHistoryError: usdcError || usdtError || bmaccError,
+    isHistoryLoading: isUsdcPending || isUsdtPending || isbmaccPending,
   };
 }

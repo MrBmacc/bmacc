@@ -21,7 +21,7 @@ export const useApproveSpend = ({
   const {
     data: hash,
     isPending,
-    writeContract,
+    writeContractAsync,
     error: approvalError,
     isError: isApprovalError,
   } = useWriteContract();
@@ -31,9 +31,9 @@ export const useApproveSpend = ({
       hash,
     });
 
-  const triggerApprove = useCallback(() => {
+  const triggerApprove = useCallback(async (): Promise<string> => {
     if (!totalAmount || !decimals || isPending || isApproving || isApproved)
-      return;
+      throw new Error("Invalid state for approval");
 
     const tokenContract = {
       abi: erc20Abi,
@@ -44,7 +44,7 @@ export const useApproveSpend = ({
     const increasedAmount = Math.ceil(Number(totalAmount) * 1.05);
     const amountInWei = parseUnits(increasedAmount.toString(), decimals);
 
-    writeContract({
+    return writeContractAsync({
       ...tokenContract,
       functionName: "approve",
       args: [cryptoTippingAddress, amountInWei],
@@ -56,7 +56,7 @@ export const useApproveSpend = ({
     isApproving,
     isPending,
     totalAmount,
-    writeContract,
+    writeContractAsync,
   ]);
 
   useEffect(() => {
