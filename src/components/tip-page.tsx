@@ -8,6 +8,7 @@ import { parseUnits } from "viem";
 
 import { tipAmounts, currencies } from "@/config/constants";
 
+import { useConfetti } from "@/hooks/use-confetti";
 import { useApproveSpend } from "@/hooks/use-approve-spend";
 import { useSendTokenTip } from "@/hooks/use-send-token-tip";
 import { useApprovalCheck } from "@/hooks/use-approval-check";
@@ -15,7 +16,8 @@ import { useProfileBySlug } from "@/hooks/use-profile-by-slug";
 import { useConnectionCheck } from "@/hooks/use-check-connection";
 
 import { CreatorHeader } from "@/components/creator-header";
-import { Card } from "./ui/card";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 export function Tip() {
   const [isPending, setIsPending] = useState(false);
@@ -24,6 +26,9 @@ export function Tip() {
   const [selectedAmount, setSelectedAmount] = useState(tipAmounts[0].amount);
 
   const { slug } = useLoaderData({ from: "/tip/$slug" });
+
+  //const { fireConfetti } = useConfetti();
+  const { fireMoneyShower, fireAllMoney } = useConfetti();
 
   const { executeWithConnectionCheck } = useConnectionCheck({
     desiredChainId: 8453,
@@ -65,9 +70,8 @@ export function Tip() {
   }
 
   const handleTip = async () => {
-    //
+    // set state to pending
     setIsPending(true);
-
     // Update to proceed with tip
     executeWithConnectionCheck(async () => {
       if (needsApproval) {
@@ -85,23 +89,27 @@ export function Tip() {
       }
 
       try {
-        const tx = await sendTip(
+        const { success, tx } = await sendTip(
           selectedCurrency.address,
           profile.wallet_address,
           parseUnits(selectedAmount, selectedCurrency.decimals)
         );
 
-        // TODO: Implement tip success
-        console.log("tx", tx);
+        if (success) {
+          console.log("tx", tx);
+          setIsPending(false);
+          fireAllMoney({ scalar: 4 });
+        } else {
+          console.error("Transaction error");
+          setIsPending(false);
+          return;
+        }
       } catch (error) {
         // Handle error
         console.error("Transaction error:", error);
         setIsPending(false);
         return;
       }
-
-      // Implementation for sending tip transaction
-      // This is a placeholder - you'll need to implement the actual contract interaction
     });
   };
 
@@ -152,6 +160,16 @@ export function Tip() {
             </div>
           </button>
         ))}
+        <div className=" text-gray-500 w-full p-2 rounded-lg border-2 flex items-center justify-center gap-6 focus-within:ring-2 focus-within:ring-teal-300">
+          <Input
+            type="number"
+            placeholder="Custom amount"
+            className="w-full border-none mb-1"
+            min={1}
+            onChange={(e) => setSelectedAmount(e.target.value)}
+          />
+          <span className="text-gray-600">{selectedCurrency.symbol}</span>
+        </div>
       </div>
 
       {needsApproval && (

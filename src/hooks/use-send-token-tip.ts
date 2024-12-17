@@ -29,14 +29,14 @@ export function useSendTokenTip() {
         args: [tokenAddress, recipient, amount],
       });
       setHasSentTip(true);
-      return tx;
+      return { success: true, tx };
     } catch (err) {
       console.error("Error sending token tip:", err);
       toast({
         title: "Error sending token tip",
         description: err as string,
       });
-      // throw err;
+      return { success: false, error: err };
     } finally {
       setIsSendingTip(false);
     }
@@ -65,7 +65,7 @@ export function useSendTokenTip() {
 
     if (hasSentTip) {
       toast({
-        title: "Tip sent",
+        title: "Tip sent 💸 🎉",
       });
     }
   }, [error, hasSentTip, isPending, isSendingTip, toast]);
