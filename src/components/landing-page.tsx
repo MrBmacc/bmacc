@@ -24,9 +24,15 @@ export function LandingPage() {
       {/* Hero Section */}
       <div className="flex-1  px-4 py-16 relative">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl text-balance sm:text-5xl font-bold text-gray-900 mb-6">
-            BUY ME A CRYPTO COFFEE
-          </h1>
+          <div className="relative">
+            <h1 className="text-4xl text-balance sm:text-5xl font-bold text-teal-800 mb-6">
+              BUY ME A CRYPTO COFFEE
+            </h1>
+            <h1 className="text-4xl text-balance sm:text-5xl font-bold mb-6 absolute -top-1 left-0 right-0 bg-gradient-to-b from-teal-300 to-teal-400 bg-clip-text text-transparent">
+              BUY ME A CRYPTO COFFEE
+            </h1>
+          </div>
+
           <p className="sm:text-xl text-gray-600 mb-8 max-w-md mx-auto text-balance">
             A decentralized way to show appreciation to your favorite creators
             with cryptocurrency tips on Base

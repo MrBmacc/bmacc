@@ -22,7 +22,7 @@ export function useUserTipsReceived(userAddress: Address) {
   } = useReadContract({
     ...cryptoTippingContract,
     functionName: "tipsReceived",
-    args: [userAddress, usdcCurrency?.address],
+    args: [userAddress, usdcCurrency?.address as Address],
   });
 
   const {
@@ -32,7 +32,7 @@ export function useUserTipsReceived(userAddress: Address) {
   } = useReadContract({
     ...cryptoTippingContract,
     functionName: "tipsReceived",
-    args: [userAddress, usdtCurrency?.address],
+    args: [userAddress, usdtCurrency?.address as Address],
   });
 
   const {
@@ -42,7 +42,7 @@ export function useUserTipsReceived(userAddress: Address) {
   } = useReadContract({
     ...cryptoTippingContract,
     functionName: "tipsReceived",
-    args: [userAddress, bmaccCurrency?.address],
+    args: [userAddress, bmaccCurrency?.address as Address],
   });
 
   return {
@@ -50,19 +50,19 @@ export function useUserTipsReceived(userAddress: Address) {
       USDC: {
         amount: usdcTips,
         formatted: usdcTips
-          ? Number(usdcTips) / 10 ** usdcCurrency?.decimals
+          ? Number(usdcTips) / 10 ** (usdcCurrency?.decimals || 6)
           : 0,
       },
       USDT: {
         amount: usdtTips,
         formatted: usdtTips
-          ? Number(usdtTips) / 10 ** usdtCurrency?.decimals
+          ? Number(usdtTips) / 10 ** (usdtCurrency?.decimals || 6)
           : 0,
       },
       BMACC: {
         amount: bmaccTips,
         formatted: bmaccTips
-          ? Number(bmaccTips) / 10 ** bmaccCurrency?.decimals
+          ? Number(bmaccTips) / 10 ** (bmaccCurrency?.decimals || 18)
           : 0,
       },
     },

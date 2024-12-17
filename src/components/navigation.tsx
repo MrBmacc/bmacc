@@ -34,13 +34,20 @@ export function Navigation() {
                 className="relative overflow-hidden flex items-center gap-3"
               >
                 <User2 size={20} />
+                <span className="sr-only">Connect</span>
               </ButtonModal>
             )}
 
             {isConnected && hasProfile && (
               <Button asChild variant="ghost" size="icon">
                 <a href={`/profile/${profile?.slug}`}>
-                  <User2 size={20} />
+                  <div className="w-8 h-8 rounded-full overflow-hidden ring-2 ring-white">
+                    <img
+                      src={profile?.image_url}
+                      alt={profile?.username}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
                 </a>
               </Button>
             )}
