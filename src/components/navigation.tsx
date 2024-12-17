@@ -13,7 +13,7 @@ export function Navigation() {
   const { hasProfile, isConnected, profile } = useProfileStatus();
 
   return (
-    <nav className="sticky top-0 z-50 bg-sky-200 rounded-t-2xl [mask-image:linear-gradient(to_bottom,black_70%,transparent)]">
+    <nav className="sticky top-0 z-50 bg-sky-300 rounded-t-2xl [mask-image:linear-gradient(to_bottom,black_70%,transparent)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <a href="/" className="flex items-center">
