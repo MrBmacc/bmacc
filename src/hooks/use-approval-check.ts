@@ -36,6 +36,15 @@ export const useApprovalCheck = ({
     );
   }, [currentAllowance, selectedAmount, selectedCurrency.decimals]);
 
+  if (selectedCurrency.symbol === "ETH") {
+    return {
+      needsApproval: false,
+      currentAllowance: undefined,
+      allowanceError: undefined,
+      allowanceIsLoading: false,
+    };
+  }
+
   return {
     needsApproval,
     currentAllowance,

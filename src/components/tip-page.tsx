@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -10,10 +10,12 @@ import { tipAmounts, currencies } from "@/config/constants";
 
 import { useConfetti } from "@/hooks/use-confetti";
 import { useApproveSpend } from "@/hooks/use-approve-spend";
+import { useSendEthTip } from "@/hooks/use-send-eth-tip";
 import { useSendTokenTip } from "@/hooks/use-send-token-tip";
 import { useApprovalCheck } from "@/hooks/use-approval-check";
 import { useProfileBySlug } from "@/hooks/use-profile-by-slug";
 import { useConnectionCheck } from "@/hooks/use-check-connection";
+import { useTokenPrices } from "@/hooks/use-token-prices";
 
 import { CreatorHeader } from "@/components/creator-header";
 import { Card } from "@/components/ui/card";
@@ -27,34 +29,51 @@ export function Tip() {
 
   const { slug } = useLoaderData({ from: "/tip/$slug" });
 
-  //const { fireConfetti } = useConfetti();
-  const { fireMoneyShower, fireAllMoney } = useConfetti();
+  const { fireAllMoney } = useConfetti();
+
+  const { tokenPrices } = useTokenPrices();
+
+  console.log(tokenPrices);
 
   const { executeWithConnectionCheck } = useConnectionCheck({
     desiredChainId: 8453,
   });
+
+  // Compute the amount in USD
+  const amountInSelectedToken = useMemo(() => {
+    if (!tokenPrices[selectedCurrency.symbol]) return "0";
+    return (
+      Number(selectedAmount) / tokenPrices[selectedCurrency.symbol].usdPrice
+    ).toFixed(selectedCurrency.decimals);
+  }, [
+    tokenPrices,
+    selectedCurrency.symbol,
+    selectedCurrency.decimals,
+    selectedAmount,
+  ]);
 
   // Get the recipient address from the database
   const { isLoading, profile, error } = useProfileBySlug(slug);
 
   // Check spending limit, approval required?
   const { needsApproval } = useApprovalCheck({
-    selectedAmount,
+    selectedAmount: amountInSelectedToken,
     selectedCurrency,
   });
 
   // TODO: After approval, trigger check again
   const { triggerApprove } = useApproveSpend({
-    totalAmount: selectedAmount,
+    totalAmount: amountInSelectedToken,
     address: selectedCurrency.address,
     decimals: selectedCurrency.decimals,
   });
 
   const { sendTip, error: sendTipError } = useSendTokenTip();
+  const { sendTip: sendEthTip, error: sendEthTipError } = useSendEthTip();
 
   useEffect(() => {
     setIsPending(false);
-  }, [sendTipError]);
+  }, [sendTipError, sendEthTipError]);
 
   if (isLoading) {
     return (
@@ -70,45 +89,63 @@ export function Tip() {
   }
 
   const handleTip = async () => {
-    // set state to pending
     setIsPending(true);
-    // Update to proceed with tip
+
+    if (amountInSelectedToken === "0") {
+      setIsPending(false);
+      console.log("Please enter an amount greater than 0");
+      // toast.error("Please enter an amount greater than 0");
+      return;
+    }
+
+    console.log("selectedCurrency", selectedCurrency);
+    console.log("amountInSelectedToken", amountInSelectedToken);
+    console.log(
+      "amountInSelectedTokenAsBigInt",
+      parseUnits(amountInSelectedToken, selectedCurrency.decimals)
+    );
+
     executeWithConnectionCheck(async () => {
-      if (needsApproval) {
-        try {
+      try {
+        // For ERC20 tokens, handle approval first
+        if (selectedCurrency.symbol !== "ETH" && needsApproval) {
           const hash = await triggerApprove();
           console.log("approvalTx", hash);
-          // hash is the transaction hash
-          // you can wait for transaction receipt if needed
-        } catch (error) {
-          // Handle error
-          console.error("Approval error:", error);
-          setIsPending(false);
-          return;
         }
-      }
 
-      try {
-        const { success, tx } = await sendTip(
-          selectedCurrency.address,
-          profile.wallet_address,
-          parseUnits(selectedAmount, selectedCurrency.decimals)
-        );
+        // Handle the actual transfer
+        if (selectedCurrency.symbol === "ETH") {
+          const { success, tx } = await sendEthTip(
+            profile.wallet_address,
+            parseUnits(amountInSelectedToken, selectedCurrency.decimals)
+          );
 
-        if (success) {
+          if (!success) {
+            throw new Error("ETH transfer failed");
+          }
+
           console.log("tx", tx);
-          setIsPending(false);
-          fireAllMoney({ scalar: 4 });
         } else {
-          console.error("Transaction error");
-          setIsPending(false);
-          return;
+          const { success, tx } = await sendTip(
+            selectedCurrency.address,
+            profile.wallet_address,
+
+            parseUnits(amountInSelectedToken, selectedCurrency.decimals)
+          );
+
+          if (!success) {
+            throw new Error("Token transfer failed");
+          }
+
+          console.log("tx", tx);
         }
+
+        // If we get here, the transaction was successful
+        setIsPending(false);
+        fireAllMoney({ scalar: 4 });
       } catch (error) {
-        // Handle error
         console.error("Transaction error:", error);
         setIsPending(false);
-        return;
       }
     });
   };
@@ -129,12 +166,17 @@ export function Tip() {
             <button
               key={currency.symbol}
               onClick={() => setSelectedCurrency(currency)}
-              className={`p-2 rounded-lg border-2 transition-all ${
+              className={`p-2 rounded-lg border-2 transition-all flex items-center gap-2 ${
                 selectedCurrency.symbol === currency.symbol
                   ? "border-teal-300 bg-teal-50"
                   : "border-gray-200 hover:border-teal-400"
               }`}
             >
+              <img
+                src={currency.image}
+                alt={currency.symbol}
+                className="w-6 h-6"
+              />
               {currency.symbol}
             </button>
           ))}
@@ -154,13 +196,11 @@ export function Tip() {
           >
             <div className="flex justify-between items-center">
               <span className="font-medium">{label}</span>
-              <span className="text-gray-600">
-                {amount} {selectedCurrency.symbol}
-              </span>
+              <span className="text-gray-600">{amount} USD</span>
             </div>
           </button>
         ))}
-        <div className=" text-gray-500 w-full p-2 rounded-lg border-2 flex items-center justify-center gap-6 focus-within:ring-2 focus-within:ring-teal-300">
+        <div className="text-gray-500 w-full p-2 rounded-lg border-2 flex items-center justify-center gap-6 focus-within:ring-2 focus-within:ring-teal-300">
           <Input
             type="number"
             placeholder="Custom amount"
@@ -168,7 +208,7 @@ export function Tip() {
             min={1}
             onChange={(e) => setSelectedAmount(e.target.value)}
           />
-          <span className="text-gray-600">{selectedCurrency.symbol}</span>
+          <span className="text-gray-600">USD</span>
         </div>
       </div>
 

@@ -28,7 +28,7 @@ export function LandingPage() {
             <h1 className="text-3xl text-balance sm:text-5xl font-bold text-teal-900 mb-6">
               BUY ME A CRYPTO COFFEE
             </h1>
-            <h1 className="text-3xl text-balance sm:text-5xl font-bold mb-6 absolute -top-1 left-0 right-0 bg-gradient-to-b from-teal-200 to-teal-300  bg-clip-text text-transparent">
+            <h1 className="text-3xl text-balance sm:text-5xl font-bold mb-6 absolute -top-1 left-0 right-0 bg-gradient-to-b from-teal-200 to-teal-300 bg-clip-text text-transparent">
               BUY ME A CRYPTO COFFEE
             </h1>
           </div>

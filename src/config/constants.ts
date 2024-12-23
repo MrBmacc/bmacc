@@ -7,27 +7,35 @@ export const cryptoTippingAddress: Address =
   "0x89A6596016C136C3b52Be584249e6359E1fdD637";
 
 export const tipAmounts = [
-  { amount: "5", label: "Small Coffee" },
-  { amount: "10", label: "Large Coffee" },
-  { amount: "20", label: "Coffee + Snack" },
+  { amount: "1", label: "Single shot" },
+  { amount: "5", label: "Double shot" },
+  { amount: "10", label: "Coffee + Snack" },
 ];
 
 export type Currency = {
   symbol: string;
   address: Address;
   decimals: number;
+  image: string;
 };
 
 export const currencies: Currency[] = [
-  { symbol: "BMACC", address: bmaccAddress, decimals: 18 },
+  {
+    symbol: "BMACC",
+    address: bmaccAddress,
+    decimals: 18,
+    image: "/images/bmacc-logo.png",
+  },
   {
     symbol: "USDC",
     address: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
     decimals: 6,
+    image: "/images/usdc.png",
   },
   {
-    symbol: "USDT",
-    address: "0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2",
-    decimals: 6,
+    symbol: "ETH",
+    address: "0x4200000000000000000000000000000000000006", // weth on base
+    decimals: 18,
+    image: "/images/eth.png",
   },
 ];

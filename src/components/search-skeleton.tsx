@@ -15,7 +15,6 @@ export const SearchSkeleton = () => {
           </div>
           <div className="flex space-x-2">
             <Skeleton className="h-9 w-24" />
-            <Skeleton className="h-9 w-24" />
           </div>
         </div>
       ))}
