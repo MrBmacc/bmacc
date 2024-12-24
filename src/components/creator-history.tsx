@@ -12,7 +12,7 @@ export const CreatorHistory = ({ profile }: { profile: Profile }) => {
     profile?.wallet_address as Address
   );
 
-  if (isHistoryLoading) {
+  if (isHistoryLoading || isTokenPricesLoading) {
     return <div>Loading...</div>;
   }
 
@@ -33,7 +33,7 @@ export const CreatorHistory = ({ profile }: { profile: Profile }) => {
             {isTokenPricesLoading ? (
               <Skeleton className="w-10 h-4" />
             ) : (
-              `$${(tips.USDC.formatted * tokenPrices.USDC.usdPrice).toFixed(2)}`
+              `$${(tips.USDC.formatted * tokenPrices.USDC?.usdPrice).toFixed(2)}`
             )}
           </div>
         </div>
@@ -46,7 +46,7 @@ export const CreatorHistory = ({ profile }: { profile: Profile }) => {
             {isTokenPricesLoading ? (
               <Skeleton className="w-10 h-4" />
             ) : (
-              `$${(tips.ETH.formatted * tokenPrices.ETH.usdPrice).toFixed(2)}`
+              `$${(tips.ETH.formatted * tokenPrices.ETH?.usdPrice).toFixed(2)}`
             )}
           </div>
         </div>
@@ -59,7 +59,7 @@ export const CreatorHistory = ({ profile }: { profile: Profile }) => {
             {isTokenPricesLoading ? (
               <Skeleton className="w-10 h-4" />
             ) : (
-              `$${(tips.BMACC.formatted * tokenPrices.BMACC.usdPrice).toFixed(2)}`
+              `$${(tips.BMACC.formatted * tokenPrices.BMACC?.usdPrice).toFixed(2)}`
             )}
           </div>
         </div>
