@@ -11,8 +11,8 @@ export function useUserTipsReceived(userAddress: Address) {
     address: cryptoTippingAddress,
   };
 
+  const ethCurrency = currencies.find((c) => c.symbol === "ETH");
   const usdcCurrency = currencies.find((c) => c.symbol === "USDC");
-  const usdtCurrency = currencies.find((c) => c.symbol === "USDT");
   const bmaccCurrency = currencies.find((c) => c.symbol === "BMACC");
 
   const {
@@ -26,13 +26,13 @@ export function useUserTipsReceived(userAddress: Address) {
   });
 
   const {
-    data: usdtTips,
-    isPending: isUsdtPending,
-    error: usdtError,
+    data: ethTips,
+    isPending: isEthPending,
+    error: ethError,
   } = useReadContract({
     ...cryptoTippingContract,
     functionName: "tipsReceived",
-    args: [userAddress, usdtCurrency?.address as Address],
+    args: [userAddress, ethCurrency?.address as Address],
   });
 
   const {
@@ -53,10 +53,10 @@ export function useUserTipsReceived(userAddress: Address) {
           ? Number(usdcTips) / 10 ** (usdcCurrency?.decimals || 6)
           : 0,
       },
-      USDT: {
-        amount: usdtTips,
-        formatted: usdtTips
-          ? Number(usdtTips) / 10 ** (usdtCurrency?.decimals || 6)
+      ETH: {
+        amount: ethTips,
+        formatted: ethTips
+          ? Number(ethTips) / 10 ** (ethCurrency?.decimals || 18)
           : 0,
       },
       BMACC: {
@@ -66,7 +66,7 @@ export function useUserTipsReceived(userAddress: Address) {
           : 0,
       },
     },
-    isHistoryError: usdcError || usdtError || bmaccError,
-    isHistoryLoading: isUsdcPending || isUsdtPending || isbmaccPending,
+    isHistoryError: usdcError || ethError || bmaccError,
+    isHistoryLoading: isUsdcPending || isEthPending || isbmaccPending,
   };
 }

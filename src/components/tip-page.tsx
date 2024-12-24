@@ -33,8 +33,6 @@ export function Tip() {
 
   const { tokenPrices } = useTokenPrices();
 
-  console.log(tokenPrices);
-
   const { executeWithConnectionCheck } = useConnectionCheck({
     desiredChainId: 8453,
   });
@@ -98,12 +96,12 @@ export function Tip() {
       return;
     }
 
-    console.log("selectedCurrency", selectedCurrency);
-    console.log("amountInSelectedToken", amountInSelectedToken);
-    console.log(
-      "amountInSelectedTokenAsBigInt",
-      parseUnits(amountInSelectedToken, selectedCurrency.decimals)
-    );
+    // console.log("selectedCurrency", selectedCurrency);
+    // console.log("amountInSelectedToken", amountInSelectedToken);
+    // console.log(
+    //   "amountInSelectedTokenAsBigInt",
+    //   parseUnits(amountInSelectedToken, selectedCurrency.decimals)
+    // );
 
     executeWithConnectionCheck(async () => {
       try {

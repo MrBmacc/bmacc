@@ -21,7 +21,11 @@ export function Navigation() {
             <span className="ml-2 text-xl font-bold text-gray-800">BMACC</span>
           </a>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" onClick={() => setIsSearchOpen(true)}>
+            <Button
+              size="icon"
+              onClick={() => setIsSearchOpen(true)}
+              className="rounded-full w-8 h-8 ring-2 ring-cyan-100 text-cyan-900"
+            >
               <Search size={20} />
               <span className="sr-only">Find Creator</span>
             </Button>
@@ -61,7 +65,12 @@ export function Navigation() {
             )}
 
             {isConnected && (
-              <Button variant="ghost" size="icon" onClick={() => disconnect()}>
+              <Button
+                size="icon"
+                variant="ghost"
+                className="rounded-full w-8 h-8"
+                onClick={() => disconnect()}
+              >
                 <LogOut size={20} />
                 <span className="sr-only">Disconnect</span>
               </Button>

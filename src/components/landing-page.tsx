@@ -118,7 +118,7 @@ function FeatureCard({
   icon: React.ReactNode;
 }) {
   return (
-    <Card className="relative bg-gradient-to-br from-stone-200/80 to-stone-400/60 bg-transparent border-none border-t border-stone-100">
+    <Card className="relative bg-gradient-to-br from-stone-200/80 to-stone-400/60 bg-transparent border-none border-t border-stone-100 ring ring-teal-400 shadow-sm shadow-zinc-800">
       <div className="absolute -top-1 -right-2 rounded bg-stone-300 text-zinc-800 px-4 py-2 text-xs font-medium shadow-sm shadow-stone-700 zoom-in fill-mode-forwards delay-1000">
         <span className="text-zinc-600 font-bold text-xl">{number}</span>
       </div>
