@@ -85,7 +85,7 @@ export function CreatorSearch() {
           placeholder="Search by username or bio..."
         />
 
-        <div className="sm:max-h-[80svh] overflow-y-auto">
+        <div className="sm:max-h-[80svh] overflow-y-auto no-scrollbar">
           <SearchResults
             results={results}
             isLoading={isLoading}
