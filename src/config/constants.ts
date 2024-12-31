@@ -3,6 +3,9 @@ import type { Address } from "viem";
 export const bmaccAddress: Address =
   "0x1D9546f458542d03a86B11bF94B490a707794218";
 
+export const usdcAddress: Address =
+  "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
+
 export const cryptoTippingAddress: Address =
   "0x89A6596016C136C3b52Be584249e6359E1fdD637";
 
@@ -28,7 +31,7 @@ export const currencies: Currency[] = [
   },
   {
     symbol: "USDC",
-    address: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+    address: usdcAddress,
     decimals: 6,
     image: "/images/usdc.png",
   },

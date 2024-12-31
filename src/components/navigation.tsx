@@ -1,10 +1,17 @@
 import { useDisconnect } from "wagmi";
 import { Search, User2, UserPlus, LogOut } from "lucide-react";
 
+import { truncateAddress } from "@/utils/truncate-address";
 import useStore from "@/stores/app.store";
 import { useProfileStatus } from "@/hooks/use-profile-status";
 
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { ButtonModal } from "@/components/button-modal";
 
 export function Navigation() {
@@ -43,17 +50,27 @@ export function Navigation() {
             )}
 
             {isConnected && hasProfile && (
-              <Button asChild variant="ghost" size="icon">
-                <a href={`/profile/${profile?.slug}`}>
-                  <div className="w-8 h-8 rounded-full overflow-hidden ring-2 ring-white">
-                    <img
-                      src={profile?.image_url}
-                      alt={profile?.username}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                </a>
-              </Button>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button asChild variant="ghost" size="icon">
+                      <a href={`/profile/${profile?.slug}`}>
+                        <div className="w-8 h-8 rounded-full overflow-hidden ring-2 ring-white">
+                          <img
+                            src={profile?.image_url}
+                            alt={profile?.username}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      </a>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{profile?.username}</p>
+                    <p>{truncateAddress(profile?.wallet_address)}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             )}
 
             {isConnected && !hasProfile && (

@@ -18,8 +18,12 @@ import { useConnectionCheck } from "@/hooks/use-check-connection";
 import { useTokenPrices } from "@/hooks/use-token-prices";
 
 import { CreatorHeader } from "@/components/creator-header";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import CurrencySelector from "@/components/currency-selector";
+
+import useStore from "@/stores/app.store";
 
 export function Tip() {
   const [isPending, setIsPending] = useState(false);
@@ -36,6 +40,8 @@ export function Tip() {
   const { executeWithConnectionCheck } = useConnectionCheck({
     desiredChainId: 8453,
   });
+
+  const { hasEthForGas } = useStore();
 
   // Compute the amount in USD
   const amountInSelectedToken = useMemo(() => {
@@ -96,13 +102,6 @@ export function Tip() {
       return;
     }
 
-    // console.log("selectedCurrency", selectedCurrency);
-    // console.log("amountInSelectedToken", amountInSelectedToken);
-    // console.log(
-    //   "amountInSelectedTokenAsBigInt",
-    //   parseUnits(amountInSelectedToken, selectedCurrency.decimals)
-    // );
-
     executeWithConnectionCheck(async () => {
       try {
         // For ERC20 tokens, handle approval first
@@ -155,31 +154,11 @@ export function Tip() {
         <h2 className="text-2xl font-bold text-gray-800">Buy me a coffee</h2>
       </div>
 
-      <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Select Currency
-        </label>
-        <div className="grid grid-cols-3 gap-2">
-          {currencies.map((currency) => (
-            <button
-              key={currency.symbol}
-              onClick={() => setSelectedCurrency(currency)}
-              className={`p-2 rounded-lg border-2 transition-all flex items-center gap-2 ${
-                selectedCurrency.symbol === currency.symbol
-                  ? "border-teal-300 bg-teal-50"
-                  : "border-gray-200 hover:border-teal-400"
-              }`}
-            >
-              <img
-                src={currency.image}
-                alt={currency.symbol}
-                className="w-6 h-6"
-              />
-              {currency.symbol}
-            </button>
-          ))}
-        </div>
-      </div>
+      <CurrencySelector
+        currencies={currencies}
+        selectedCurrency={selectedCurrency}
+        setSelectedCurrency={setSelectedCurrency}
+      />
 
       <div className="space-y-4 mb-6">
         {tipAmounts.map(({ amount, label }) => (
@@ -210,23 +189,44 @@ export function Tip() {
         </div>
       </div>
 
-      {needsApproval && (
-        <div className="text-red-500 text-xs text-center my-2">
-          For security reasons, you will be asked to approve a spending cap.
-        </div>
+      {hasEthForGas && (
+        <>
+          {needsApproval && (
+            <div className="text-red-500 text-xs text-center my-2">
+              For security reasons, you will be asked to approve a spending cap.
+            </div>
+          )}
+
+          <Button onClick={handleTip} disabled={isPending} className="w-full">
+            {isPending ? "Sending..." : "Send Tip"}
+          </Button>
+
+          <Link
+            className="text-sm text-muted-foreground text-center block my-2"
+            to="/profile/$slug"
+            params={{ slug: profile.slug }}
+          >
+            View Profile
+          </Link>
+        </>
       )}
 
-      <Button onClick={handleTip} disabled={isPending} className="w-full">
-        {isPending ? "Sending..." : "Send Tip"}
-      </Button>
-
-      <Link
-        className="text-sm text-muted-foreground text-center block my-2"
-        to="/profile/$slug"
-        params={{ slug: profile.slug }}
-      >
-        View Profile
-      </Link>
+      {!hasEthForGas && (
+        <Alert variant="destructive" className="bg-red-300/10">
+          <AlertTitle>Oh dang!</AlertTitle>
+          <AlertDescription className="text-balance">
+            Looks like you don't have enough ETH for gas.{" "}
+            <a
+              href="https://earn.brewlabs.info/swap"
+              target="_blank"
+              className="underline"
+            >
+              Please top up your wallet
+            </a>
+            .
+          </AlertDescription>
+        </Alert>
+      )}
     </Card>
   );
 }
