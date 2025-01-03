@@ -2,6 +2,7 @@ import { createRootRoute, Outlet } from "@tanstack/react-router";
 
 import { Navigation } from "@/components/navigation";
 import { CreatorSearch } from "@/components/creator-search";
+import { PageNotFound } from "@/components/page-not-found";
 
 export const Route = createRootRoute({
   component: () => (
@@ -15,4 +16,5 @@ export const Route = createRootRoute({
       <CreatorSearch />
     </div>
   ),
+  notFoundComponent: () => <PageNotFound />,
 });

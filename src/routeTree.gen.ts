@@ -10,123 +10,142 @@
 
 // Import Routes
 
-import { Route as rootRoute } from "./routes/__root";
-import { Route as CreateImport } from "./routes/create";
-import { Route as IndexImport } from "./routes/index";
-import { Route as TipSlugImport } from "./routes/tip.$slug";
-import { Route as ProfileSlugImport } from "./routes/profile.$slug";
+import { Route as rootRoute } from './routes/__root'
+import { Route as CreateImport } from './routes/create'
+import { Route as R404Import } from './routes/404'
+import { Route as IndexImport } from './routes/index'
+import { Route as TipSlugImport } from './routes/tip.$slug'
+import { Route as ProfileSlugImport } from './routes/profile.$slug'
 
 // Create/Update Routes
 
 const CreateRoute = CreateImport.update({
-  id: "/create",
-  path: "/create",
+  id: '/create',
+  path: '/create',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
+
+const R404Route = R404Import.update({
+  id: '/404',
+  path: '/404',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
-  id: "/",
-  path: "/",
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const TipSlugRoute = TipSlugImport.update({
-  id: "/tip/$slug",
-  path: "/tip/$slug",
+  id: '/tip/$slug',
+  path: '/tip/$slug',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const ProfileSlugRoute = ProfileSlugImport.update({
-  id: "/profile/$slug",
-  path: "/profile/$slug",
+  id: '/profile/$slug',
+  path: '/profile/$slug',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 // Populate the FileRoutesByPath interface
 
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    "/": {
-      id: "/";
-      path: "/";
-      fullPath: "/";
-      preLoaderRoute: typeof IndexImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/create": {
-      id: "/create";
-      path: "/create";
-      fullPath: "/create";
-      preLoaderRoute: typeof CreateImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/profile/$slug": {
-      id: "/profile/$slug";
-      path: "/profile/$slug";
-      fullPath: "/profile/$slug";
-      preLoaderRoute: typeof ProfileSlugImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/tip/$slug": {
-      id: "/tip/$slug";
-      path: "/tip/$slug";
-      fullPath: "/tip/$slug";
-      preLoaderRoute: typeof TipSlugImport;
-      parentRoute: typeof rootRoute;
-    };
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/404': {
+      id: '/404'
+      path: '/404'
+      fullPath: '/404'
+      preLoaderRoute: typeof R404Import
+      parentRoute: typeof rootRoute
+    }
+    '/create': {
+      id: '/create'
+      path: '/create'
+      fullPath: '/create'
+      preLoaderRoute: typeof CreateImport
+      parentRoute: typeof rootRoute
+    }
+    '/profile/$slug': {
+      id: '/profile/$slug'
+      path: '/profile/$slug'
+      fullPath: '/profile/$slug'
+      preLoaderRoute: typeof ProfileSlugImport
+      parentRoute: typeof rootRoute
+    }
+    '/tip/$slug': {
+      id: '/tip/$slug'
+      path: '/tip/$slug'
+      fullPath: '/tip/$slug'
+      preLoaderRoute: typeof TipSlugImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  "/": typeof IndexRoute;
-  "/create": typeof CreateRoute;
-  "/profile/$slug": typeof ProfileSlugRoute;
-  "/tip/$slug": typeof TipSlugRoute;
+  '/': typeof IndexRoute
+  '/404': typeof R404Route
+  '/create': typeof CreateRoute
+  '/profile/$slug': typeof ProfileSlugRoute
+  '/tip/$slug': typeof TipSlugRoute
 }
 
 export interface FileRoutesByTo {
-  "/": typeof IndexRoute;
-  "/create": typeof CreateRoute;
-  "/profile/$slug": typeof ProfileSlugRoute;
-  "/tip/$slug": typeof TipSlugRoute;
+  '/': typeof IndexRoute
+  '/404': typeof R404Route
+  '/create': typeof CreateRoute
+  '/profile/$slug': typeof ProfileSlugRoute
+  '/tip/$slug': typeof TipSlugRoute
 }
 
 export interface FileRoutesById {
-  __root__: typeof rootRoute;
-  "/": typeof IndexRoute;
-  "/create": typeof CreateRoute;
-  "/profile/$slug": typeof ProfileSlugRoute;
-  "/tip/$slug": typeof TipSlugRoute;
+  __root__: typeof rootRoute
+  '/': typeof IndexRoute
+  '/404': typeof R404Route
+  '/create': typeof CreateRoute
+  '/profile/$slug': typeof ProfileSlugRoute
+  '/tip/$slug': typeof TipSlugRoute
 }
 
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: "/" | "/create" | "/profile/$slug" | "/tip/$slug";
-  fileRoutesByTo: FileRoutesByTo;
-  to: "/" | "/create" | "/profile/$slug" | "/tip/$slug";
-  id: "__root__" | "/" | "/create" | "/profile/$slug" | "/tip/$slug";
-  fileRoutesById: FileRoutesById;
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths: '/' | '/404' | '/create' | '/profile/$slug' | '/tip/$slug'
+  fileRoutesByTo: FileRoutesByTo
+  to: '/' | '/404' | '/create' | '/profile/$slug' | '/tip/$slug'
+  id: '__root__' | '/' | '/404' | '/create' | '/profile/$slug' | '/tip/$slug'
+  fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute;
-  CreateRoute: typeof CreateRoute;
-  ProfileSlugRoute: typeof ProfileSlugRoute;
-  TipSlugRoute: typeof TipSlugRoute;
+  IndexRoute: typeof IndexRoute
+  R404Route: typeof R404Route
+  CreateRoute: typeof CreateRoute
+  ProfileSlugRoute: typeof ProfileSlugRoute
+  TipSlugRoute: typeof TipSlugRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  R404Route: R404Route,
   CreateRoute: CreateRoute,
   ProfileSlugRoute: ProfileSlugRoute,
   TipSlugRoute: TipSlugRoute,
-};
+}
 
 export const routeTree = rootRoute
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>();
+  ._addFileTypes<FileRouteTypes>()
 
 /* ROUTE_MANIFEST_START
 {
@@ -135,6 +154,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/404",
         "/create",
         "/profile/$slug",
         "/tip/$slug"
@@ -142,6 +162,9 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/404": {
+      "filePath": "404.tsx"
     },
     "/create": {
       "filePath": "create.tsx"
