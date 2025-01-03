@@ -74,11 +74,25 @@ export function Navigation() {
             )}
 
             {isConnected && !hasProfile && (
-              <Button asChild variant="ghost" size="icon">
-                <a href="/create">
-                  <UserPlus size={20} />
-                </a>
-              </Button>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      asChild
+                      size="icon"
+                      variant="ghost"
+                      className="rounded-full w-8 h-8"
+                    >
+                      <a href="/create">
+                        <UserPlus size={20} />
+                      </a>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Create Profile</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             )}
 
             {isConnected && (

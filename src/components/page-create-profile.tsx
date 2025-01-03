@@ -173,7 +173,7 @@ export function CreateProfile() {
   }
 
   return (
-    <Card className="max-w-2xl mx-auto shadow-xl">
+    <Card className="max-w-2xl mx-auto shadow-xl relative z-10">
       <CardContent>
         <div className="space-y-6 mt-6">
           <div>
