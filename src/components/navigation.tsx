@@ -38,15 +38,24 @@ export function Navigation() {
             </Button>
 
             {!isConnected && !hasProfile && (
-              <ButtonModal
-                size="icon"
-                variant="ghost"
-                screen="Connect"
-                className="relative overflow-hidden flex items-center gap-3"
-              >
-                <User2 size={20} />
-                <span className="sr-only">Connect</span>
-              </ButtonModal>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <ButtonModal
+                      size="icon"
+                      variant="ghost"
+                      screen="Connect"
+                      className="relative overflow-hidden flex items-center gap-3 rounded-full w-8 h-8"
+                    >
+                      <User2 size={20} />
+                      <span className="sr-only">Connect</span>
+                    </ButtonModal>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Connect</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             )}
 
             {isConnected && hasProfile && (

@@ -98,14 +98,19 @@ export const useUserBalance = (): UserBalances => {
   const hasNative = Boolean(
     nativeBalance.data?.value && nativeBalance.data.value > 0n
   );
+
   const hasUsdc = Boolean(
     formattedBalances.usdcBalance?.balance &&
       formattedBalances.usdcBalance.balance > 0n
   );
+
   const hasBmacc = Boolean(
     formattedBalances.bmaccBalance?.balance &&
       formattedBalances.bmaccBalance.balance > 0n
   );
+
+  console.log("nativeBalance", nativeBalance);
+  console.log("formattedBalances", formattedBalances);
 
   return {
     nativeBalance,

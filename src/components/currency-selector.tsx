@@ -1,7 +1,8 @@
+import { Wallet } from "lucide-react";
 import { useUserBalance } from "@/hooks/use-user-balance";
 
-import { Tooltip } from "@/components/ui/tooltip";
 import {
+  Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
@@ -20,7 +21,14 @@ const CurrencySelector = ({
   selectedCurrency,
   setSelectedCurrency,
 }: CurrencySelectorProps) => {
-  const { hasNative, hasUsdc, hasBmacc } = useUserBalance();
+  const {
+    hasNative,
+    hasUsdc,
+    hasBmacc,
+    usdcBalance,
+    bmaccBalance,
+    nativeBalance,
+  } = useUserBalance();
 
   const getIsDisabled = (symbol: string) => {
     switch (symbol) {
@@ -32,6 +40,25 @@ const CurrencySelector = ({
         return !hasBmacc;
       default:
         return false;
+    }
+  };
+
+  const getBalance = (symbol: string) => {
+    switch (symbol) {
+      case "ETH":
+        return nativeBalance
+          ? `${Number(nativeBalance.data?.formatted).toFixed(4)} ETH`
+          : "0 ETH";
+      case "USDC":
+        return usdcBalance
+          ? `${Number(usdcBalance.formatted).toFixed(2)} USDC`
+          : "0 USDC";
+      case "BMACC":
+        return bmaccBalance
+          ? `${Number(bmaccBalance.formatted).toFixed(2)} BMACC`
+          : "0 BMACC";
+      default:
+        return "0";
     }
   };
 
@@ -71,11 +98,15 @@ const CurrencySelector = ({
                     </button>
                   </div>
                 </TooltipTrigger>
-                {isDisabled && (
-                  <TooltipContent>
+                <TooltipContent>
+                  {isDisabled ? (
                     <p>You don't have any {currency.symbol}</p>
-                  </TooltipContent>
-                )}
+                  ) : (
+                    <p className="flex items-center gap-2">
+                      <Wallet size={16} /> {getBalance(currency.symbol)}
+                    </p>
+                  )}
+                </TooltipContent>
               </Tooltip>
             );
           })}

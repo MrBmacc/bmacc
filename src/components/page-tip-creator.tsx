@@ -1,9 +1,9 @@
 import { useState, useEffect, useMemo } from "react";
 
-import { Button } from "@/components/ui/button";
+import { parseUnits } from "viem";
+import { useAccount } from "wagmi";
 import { useLoaderData } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
-import { parseUnits } from "viem";
 
 import { tipAmounts, currencies } from "@/config/constants";
 
@@ -17,14 +17,18 @@ import { useConnectionCheck } from "@/hooks/use-check-connection";
 import { useTokenPrices } from "@/hooks/use-token-prices";
 import { useUserBalance } from "@/hooks/use-user-balance";
 
+import { ButtonModal } from "@/components/button-modal";
 import { CreatorHeader } from "@/components/creator-header";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { PageLoader } from "@/components/ui/page-loader";
 import CurrencySelector from "@/components/currency-selector";
 
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { PageLoader } from "@/components/ui/page-loader";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+
 export function Tip() {
+  const { isConnected } = useAccount();
   const [isPending, setIsPending] = useState(false);
 
   const [selectedCurrency, setSelectedCurrency] = useState(currencies[0]);
@@ -33,11 +37,13 @@ export function Tip() {
   const { slug } = useLoaderData({ from: "/tip/$slug" });
 
   const { fireAllMoney } = useConfetti();
-  const { hasNative } = useUserBalance();
+  const { hasNative, nativeBalance } = useUserBalance();
   const { tokenPrices } = useTokenPrices();
   const { executeWithConnectionCheck } = useConnectionCheck({
     desiredChainId: 8453,
   });
+
+  console.log("nativeBalance", nativeBalance);
 
   // Compute the amount in USD
   const amountInSelectedToken = useMemo(() => {
@@ -80,9 +86,8 @@ export function Tip() {
     return <PageLoader />;
   }
 
-  // TODO: An actual 404 would be nice
   if (error || !profile) {
-    return <div>Error</div>;
+    return <div className="text-center">Error</div>;
   }
 
   const handleTip = async () => {
@@ -182,7 +187,13 @@ export function Tip() {
         </div>
       </div>
 
-      {hasNative && (
+      {!isConnected && (
+        <ButtonModal screen="Connect" className="w-full">
+          Please connect your wallet to send a tip.
+        </ButtonModal>
+      )}
+
+      {isConnected && hasNative && (
         <>
           {needsApproval && (
             <div className="text-red-500 text-xs text-center my-2 text-balance">
@@ -204,7 +215,7 @@ export function Tip() {
         </>
       )}
 
-      {!hasNative && (
+      {isConnected && !hasNative && (
         <Alert variant="destructive" className="bg-red-300/10 text-center">
           <AlertTitle>Oh dang!</AlertTitle>
           <AlertDescription className="text-balance">
