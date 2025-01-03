@@ -22,7 +22,7 @@ export const ButtonCopyClipboard = ({
   };
 
   return (
-    <Button onClick={() => copyToClipboard(text)} {...props}>
+    <Button onClick={() => copyToClipboard(text)} {...props} variant="ghost">
       {children}
     </Button>
   );

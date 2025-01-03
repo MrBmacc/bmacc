@@ -35,6 +35,7 @@ export function useSendTokenTip() {
       toast({
         title: "Error sending token tip",
         description: err as string,
+        variant: "destructive",
       });
       return { success: false, error: err };
     } finally {
@@ -59,6 +60,7 @@ export function useSendTokenTip() {
     if (error) {
       toast({
         title: "Error sending token tip",
+        variant: "destructive",
       });
       setIsSendingTip(false);
     }

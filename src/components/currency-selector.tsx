@@ -54,7 +54,7 @@ const CurrencySelector = ({
                         !isDisabled && setSelectedCurrency(currency)
                       }
                       disabled={isDisabled}
-                      className={`p-2 w-full rounded-lg border-2 transition-all flex items-center gap-2 ${
+                      className={`p-2 w-full rounded-lg border-2 transition-all flex items-center gap-2 text-sm sm:text-base ${
                         isDisabled
                           ? "border-gray-200 bg-gray-50 opacity-50 cursor-not-allowed"
                           : selectedCurrency.symbol === currency.symbol
@@ -65,7 +65,7 @@ const CurrencySelector = ({
                       <img
                         src={currency.image}
                         alt={currency.symbol}
-                        className="w-6 h-6"
+                        className="sm:w-6 sm:h-6 w-4 h-4"
                       />
                       {currency.symbol}
                     </button>

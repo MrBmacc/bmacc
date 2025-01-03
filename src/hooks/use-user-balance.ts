@@ -4,10 +4,8 @@ import { erc20Abi, formatUnits } from "viem";
 import { useMemo, useEffect } from "react";
 
 import useStore from "@/stores/app.store";
-
 import { bmaccAddress, usdcAddress } from "@/config/constants";
 
-// Type definitions for better type safety
 type TokenBalance = {
   balance: bigint;
   decimals: number;
