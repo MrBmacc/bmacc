@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo } from "react";
-import { Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { useLoaderData } from "@tanstack/react-router";
@@ -21,13 +20,13 @@ import { CreatorHeader } from "@/components/creator-header";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { PageLoader } from "@/components/ui/page-loader";
 import CurrencySelector from "@/components/currency-selector";
 
 import useStore from "@/stores/app.store";
 
 export function Tip() {
   const [isPending, setIsPending] = useState(false);
-
   const [selectedCurrency, setSelectedCurrency] = useState(currencies[0]);
   const [selectedAmount, setSelectedAmount] = useState(tipAmounts[0].amount);
 
@@ -80,11 +79,7 @@ export function Tip() {
   }, [sendTipError, sendEthTipError]);
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="w-8 h-8 animate-spin text-teal-300" />
-      </div>
-    );
+    return <PageLoader />;
   }
 
   // TODO: An actual 404 would be nice
@@ -148,7 +143,7 @@ export function Tip() {
   };
 
   return (
-    <Card className="max-w-md mx-auto rounded-2xl shadow-xl p-6 z-10 relative">
+    <Card className="max-w-md mx-auto shadow-xl sm:p-6 z-10 relative p-4">
       <CreatorHeader profile={profile} />
       <div className="text-center mb-6 mt-16">
         <h2 className="text-2xl font-bold text-gray-800">Buy me a coffee</h2>
@@ -177,11 +172,11 @@ export function Tip() {
             </div>
           </button>
         ))}
-        <div className="text-gray-500 w-full p-2 rounded-lg border-2 flex items-center justify-center gap-6 focus-within:ring-2 focus-within:ring-teal-300">
+        <div className="text-gray-500 w-full p-4 rounded-lg border-2 flex items-center justify-center gap-6 focus-within:ring-2 focus-within:ring-teal-300">
           <Input
             type="number"
             placeholder="Custom amount"
-            className="w-full border-none mb-1"
+            className="w-full border-none mb-0 shadow-none"
             min={1}
             onChange={(e) => setSelectedAmount(e.target.value)}
           />
@@ -206,7 +201,7 @@ export function Tip() {
             to="/profile/$slug"
             params={{ slug: profile.slug }}
           >
-            View Profile
+            View {profile.username}'s Profile
           </Link>
         </>
       )}

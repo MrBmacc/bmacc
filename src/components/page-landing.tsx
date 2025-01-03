@@ -58,7 +58,7 @@ export function LandingPage() {
 
             {!isLoading && isConnected && hasProfile && (
               <Button className="w-36" asChild>
-                <a href={`/profile/${profile?.slug}`} className="">
+                <a href={`/profile/${profile?.slug}`}>
                   <UserPlus size={20} />
                   View Profile
                 </a>

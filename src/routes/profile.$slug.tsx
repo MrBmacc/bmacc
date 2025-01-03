@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ProfilePage } from "@/components/profile-page";
+import { ProfilePage } from "@/components/page-creator-profile";
 
 export const Route = createFileRoute("/profile/$slug")({
   component: ProfilePage,

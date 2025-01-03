@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Tip } from "@/components/tip-page";
+import { Tip } from "@/components/page-tip-creator";
 
 export const Route = createFileRoute("/tip/$slug")({
   component: Tip,

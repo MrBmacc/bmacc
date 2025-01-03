@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { PageLoader } from "@/components/ui/page-loader";
 import { Card, CardContent } from "@/components/ui/card";
 import { ButtonCreateProfile } from "@/components/button-create-profile";
 
@@ -38,8 +39,8 @@ export function CreateProfile() {
         description: "Redirecting to your profile...",
       });
       navigate({
-        to: "/profile/$username",
-        params: { username: profile.username },
+        to: "/profile/$slug",
+        params: { slug: profile.slug },
       });
     }
   }, [hasProfile, profile, navigate, toast]);
@@ -168,15 +169,11 @@ export function CreateProfile() {
   }
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
-      </div>
-    );
+    return <PageLoader />;
   }
 
   return (
-    <Card className="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl">
+    <Card className="max-w-2xl mx-auto shadow-xl">
       <CardContent>
         <div className="space-y-6 mt-6">
           <div>

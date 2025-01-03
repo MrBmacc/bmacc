@@ -3,7 +3,6 @@ import { QRCodeSVG } from "qrcode.react";
 import {
   Copy,
   Coffee,
-  Loader2,
   Pencil,
   Trash2,
   Wallet2,
@@ -29,6 +28,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { PageLoader } from "@/components/ui/page-loader";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 import { CreatorHeader } from "@/components/creator-header";
@@ -38,6 +38,8 @@ import { DeleteProfileDialog } from "@/components/delete-profile-dialog";
 import { ButtonCopyClipboard } from "@/components/button-copy-clipboard";
 
 import { truncateAddress } from "@/utils/truncate-address";
+
+import coffeeCup from "@/assets/takeaway-coffee.png";
 
 export function ProfilePage() {
   const { slug } = useParams({ from: "/profile/$slug" });
@@ -110,11 +112,7 @@ export function ProfilePage() {
   };
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
-      </div>
-    );
+    return <PageLoader />;
   }
 
   if (!profile) {
@@ -135,7 +133,7 @@ export function ProfilePage() {
     address?.toLowerCase() === profile.wallet_address.toLowerCase();
 
   return (
-    <Card className="max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-xl relative animate-in slide-in-from-top ease-in-out z-10">
+    <Card className="max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-xl relative animate-in slide-in-from-top ease-in-out z-10 pb-20">
       <CreatorHeader profile={profile} />
       {isOwner && (
         <DropdownMenu>
@@ -161,8 +159,6 @@ export function ProfilePage() {
                 </DropdownMenuShortcut>
               </DropdownMenuItem>
             </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Copy Link</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )}
@@ -180,15 +176,7 @@ export function ProfilePage() {
       <div className="bg-gradient-to-r from-purple-50 to-blue-50 p-4 rounded-xl mb-6">
         <div className="flex flex-col items-center justify-center space-x-6">
           <QRCodeSVG value={profileUrl} />
-          <p className="text-sm text-gray-600 break-all">{profileUrl}</p>
         </div>
-      </div>
-
-      <div className="flex justify-center gap-6 mb-6">
-        <ButtonCopyClipboard text={profileUrl}>
-          <Copy size={18} className="mr-2" />
-          <span>Copy Link</span>
-        </ButtonCopyClipboard>
       </div>
 
       {isOwner && (
@@ -221,13 +209,28 @@ export function ProfilePage() {
       )}
 
       {!isOwner && (
-        <Button asChild className="w-full py-6 text-lg">
+        <Button
+          asChild
+          className="w-[99%] py-6 text-lg  inset-x-0 absolute bottom-1 mx-auto "
+        >
           <Link to="/tip/$slug" params={{ slug }}>
-            <Coffee className="mr-2" />
-            Buy me a coffee
+            <img
+              src={coffeeCup}
+              alt="Coffee cup"
+              className="sm:w-20 w-16 h-auto mr-2 -rotate-6 absolute sm:-top-4 -top-2 sm:left-1/4 left-6"
+            />
+            <span className="pl-6">BUY ME A COFFEE</span>
           </Link>
         </Button>
       )}
+
+      <div className="flex justify-center gap-6 my-6 items-center ring-1 ring-gray-200 rounded-lg p-0.5">
+        <p className="text-gray-600 break-all text-xs">{profileUrl}</p>
+        <ButtonCopyClipboard text={profileUrl}>
+          <Copy size={16} />
+          <span className="sr-only">Copy Link</span>
+        </ButtonCopyClipboard>
+      </div>
 
       <EditProfileDialog
         isOpen={isEditOpen}
