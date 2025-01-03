@@ -15,6 +15,7 @@ import { useApprovalCheck } from "@/hooks/use-approval-check";
 import { useProfileBySlug } from "@/hooks/use-profile-by-slug";
 import { useConnectionCheck } from "@/hooks/use-check-connection";
 import { useTokenPrices } from "@/hooks/use-token-prices";
+import { useUserBalance } from "@/hooks/use-user-balance";
 
 import { CreatorHeader } from "@/components/creator-header";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -23,24 +24,20 @@ import { Input } from "@/components/ui/input";
 import { PageLoader } from "@/components/ui/page-loader";
 import CurrencySelector from "@/components/currency-selector";
 
-import useStore from "@/stores/app.store";
-
 export function Tip() {
   const [isPending, setIsPending] = useState(false);
+
   const [selectedCurrency, setSelectedCurrency] = useState(currencies[0]);
   const [selectedAmount, setSelectedAmount] = useState(tipAmounts[0].amount);
 
   const { slug } = useLoaderData({ from: "/tip/$slug" });
 
   const { fireAllMoney } = useConfetti();
-
+  const { hasNative } = useUserBalance();
   const { tokenPrices } = useTokenPrices();
-
   const { executeWithConnectionCheck } = useConnectionCheck({
     desiredChainId: 8453,
   });
-
-  const { hasEthForGas } = useStore();
 
   // Compute the amount in USD
   const amountInSelectedToken = useMemo(() => {
@@ -78,6 +75,7 @@ export function Tip() {
     setIsPending(false);
   }, [sendTipError, sendEthTipError]);
 
+  // If not enough eth for gas, set hasEthForGas to false
   if (isLoading) {
     return <PageLoader />;
   }
@@ -172,11 +170,11 @@ export function Tip() {
             </div>
           </button>
         ))}
-        <div className="text-gray-500 w-full p-4 rounded-lg border-2 flex items-center justify-center gap-6 focus-within:ring-2 focus-within:ring-teal-300">
+        <div className="text-gray-500 w-full py-2 px-4 rounded-lg border-2 flex items-center justify-center gap-6 focus-within:ring-2 focus-within:ring-teal-300">
           <Input
             type="number"
             placeholder="Custom amount"
-            className="w-full border-none mb-0 shadow-none"
+            className="w-full border-none mb-0 shadow-none placeholder:font-medium pl-1 placeholder:text-gray-800 placeholder:text-base"
             min={1}
             onChange={(e) => setSelectedAmount(e.target.value)}
           />
@@ -184,10 +182,10 @@ export function Tip() {
         </div>
       </div>
 
-      {hasEthForGas && (
+      {hasNative && (
         <>
           {needsApproval && (
-            <div className="text-red-500 text-xs text-center my-2">
+            <div className="text-red-500 text-xs text-center my-2 text-balance">
               For security reasons, you will be asked to approve a spending cap.
             </div>
           )}
@@ -197,7 +195,7 @@ export function Tip() {
           </Button>
 
           <Link
-            className="text-sm text-muted-foreground text-center block my-2"
+            className="text-sm text-muted-foreground text-center block my-3"
             to="/profile/$slug"
             params={{ slug: profile.slug }}
           >
@@ -206,8 +204,8 @@ export function Tip() {
         </>
       )}
 
-      {!hasEthForGas && (
-        <Alert variant="destructive" className="bg-red-300/10">
+      {!hasNative && (
+        <Alert variant="destructive" className="bg-red-300/10 text-center">
           <AlertTitle>Oh dang!</AlertTitle>
           <AlertDescription className="text-balance">
             Looks like you don't have enough ETH for gas.{" "}

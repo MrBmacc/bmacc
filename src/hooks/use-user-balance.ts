@@ -1,9 +1,8 @@
 import { useAccount, useBalance, useReadContracts } from "wagmi";
 import { base } from "wagmi/chains";
 import { erc20Abi, formatUnits } from "viem";
-import { useMemo, useEffect } from "react";
+import { useMemo } from "react";
 
-import useStore from "@/stores/app.store";
 import { bmaccAddress, usdcAddress } from "@/config/constants";
 
 type TokenBalance = {
@@ -94,16 +93,6 @@ export const useUserBalance = (): UserBalances => {
     }),
     [usdcResult, bmaccResult]
   );
-
-  // If not enough eth for gas, set hasEthForGas to false
-  const { setHasEthForGas } = useStore();
-  useEffect(() => {
-    if (nativeBalance.data?.value && nativeBalance.data.value < 1n) {
-      setHasEthForGas(false);
-    } else {
-      setHasEthForGas(true);
-    }
-  }, [nativeBalance.data?.value, setHasEthForGas]);
 
   // Calculate has-token flags
   const hasNative = Boolean(
