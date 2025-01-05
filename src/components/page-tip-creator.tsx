@@ -37,13 +37,11 @@ export function Tip() {
   const { slug } = useLoaderData({ from: "/tip/$slug" });
 
   const { fireAllMoney } = useConfetti();
-  const { hasNative, nativeBalance } = useUserBalance();
+  const { hasNative } = useUserBalance();
   const { tokenPrices } = useTokenPrices();
   const { executeWithConnectionCheck } = useConnectionCheck({
     desiredChainId: 8453,
   });
-
-  console.log("nativeBalance", nativeBalance);
 
   // Compute the amount in USD
   const amountInSelectedToken = useMemo(() => {

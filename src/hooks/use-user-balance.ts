@@ -109,9 +109,6 @@ export const useUserBalance = (): UserBalances => {
       formattedBalances.bmaccBalance.balance > 0n
   );
 
-  console.log("nativeBalance", nativeBalance);
-  console.log("formattedBalances", formattedBalances);
-
   return {
     nativeBalance,
     ...formattedBalances,
