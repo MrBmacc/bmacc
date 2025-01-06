@@ -31,8 +31,18 @@ export function Tip() {
   const [isPending, setIsPending] = useState(false);
   const { hasNative, hasUsdc, hasBmacc } = useUserBalance();
 
-  // Modified to find first available currency
-  const getInitialCurrency = () => {
+  const [selectedCurrency, setSelectedCurrency] = useState(currencies[0]);
+  const [selectedAmount, setSelectedAmount] = useState(tipAmounts[0].amount);
+
+  const { slug } = useLoaderData({ from: "/tip/$slug" });
+
+  const { fireAllMoney } = useConfetti();
+  const { tokenPrices } = useTokenPrices();
+  const { executeWithConnectionCheck } = useConnectionCheck({
+    desiredChainId: 8453,
+  });
+
+  useEffect(() => {
     const availableCurrencies = currencies.filter((currency) => {
       switch (currency.symbol) {
         case "ETH":
@@ -45,20 +55,8 @@ export function Tip() {
           return false;
       }
     });
-    return availableCurrencies[0] || currencies[0]; // Fallback to first currency if none available
-  };
-
-  const [selectedCurrency, setSelectedCurrency] =
-    useState(getInitialCurrency());
-  const [selectedAmount, setSelectedAmount] = useState(tipAmounts[0].amount);
-
-  const { slug } = useLoaderData({ from: "/tip/$slug" });
-
-  const { fireAllMoney } = useConfetti();
-  const { tokenPrices } = useTokenPrices();
-  const { executeWithConnectionCheck } = useConnectionCheck({
-    desiredChainId: 8453,
-  });
+    setSelectedCurrency(availableCurrencies[0] || currencies[0]);
+  }, [hasNative, hasUsdc, hasBmacc]);
 
   // Compute the amount in USD
   const amountInSelectedToken = useMemo(() => {
