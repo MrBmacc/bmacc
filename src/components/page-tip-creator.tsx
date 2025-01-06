@@ -2,8 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 
 import { parseUnits } from "viem";
 import { useAccount } from "wagmi";
-import { useLoaderData } from "@tanstack/react-router";
-import { Link } from "@tanstack/react-router";
+import { Link, useLoaderData } from "@tanstack/react-router";
 
 import { tipAmounts, currencies } from "@/config/constants";
 
@@ -30,14 +29,32 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 export function Tip() {
   const { isConnected } = useAccount();
   const [isPending, setIsPending] = useState(false);
+  const { hasNative, hasUsdc, hasBmacc } = useUserBalance();
 
-  const [selectedCurrency, setSelectedCurrency] = useState(currencies[0]);
+  // Modified to find first available currency
+  const getInitialCurrency = () => {
+    const availableCurrencies = currencies.filter((currency) => {
+      switch (currency.symbol) {
+        case "ETH":
+          return hasNative;
+        case "USDC":
+          return hasUsdc;
+        case "BMACC":
+          return hasBmacc;
+        default:
+          return false;
+      }
+    });
+    return availableCurrencies[0] || currencies[0]; // Fallback to first currency if none available
+  };
+
+  const [selectedCurrency, setSelectedCurrency] =
+    useState(getInitialCurrency());
   const [selectedAmount, setSelectedAmount] = useState(tipAmounts[0].amount);
 
   const { slug } = useLoaderData({ from: "/tip/$slug" });
 
   const { fireAllMoney } = useConfetti();
-  const { hasNative } = useUserBalance();
   const { tokenPrices } = useTokenPrices();
   const { executeWithConnectionCheck } = useConnectionCheck({
     desiredChainId: 8453,
@@ -59,7 +76,7 @@ export function Tip() {
   // Get the recipient address from the database
   const { isLoading, profile, error } = useProfileBySlug(slug);
 
-  // Check spending limit, approval required?
+  // Check spending limit, is approval required?
   const { needsApproval } = useApprovalCheck({
     selectedAmount: amountInSelectedToken,
     selectedCurrency,
