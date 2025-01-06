@@ -4,7 +4,7 @@ import erc20ABI from "@/config/abi/erc20.json";
 import { cryptoTippingAddress } from "@/config/constants";
 import type { Currency } from "@/config/constants";
 
-import { parseUnits } from "viem";
+import { parseUnits, formatUnits } from "viem";
 
 export const useApprovalCheck = ({
   selectedAmount,
@@ -18,6 +18,7 @@ export const useApprovalCheck = ({
     data: currentAllowance,
     error: allowanceError,
     isLoading: allowanceIsLoading,
+    refetch: refetchAllowance,
   } = useReadContract({
     abi: erc20ABI,
     address: selectedCurrency.address,
@@ -36,19 +37,30 @@ export const useApprovalCheck = ({
     );
   }, [currentAllowance, selectedAmount, selectedCurrency.decimals]);
 
+  const formattedCurrentAllowance = useMemo(() => {
+    if (currentAllowance === undefined) {
+      return "0";
+    }
+
+    return formatUnits(currentAllowance as bigint, selectedCurrency.decimals);
+  }, [currentAllowance, selectedCurrency.decimals]);
+
   if (selectedCurrency.symbol === "ETH") {
     return {
       needsApproval: false,
       currentAllowance: undefined,
       allowanceError: undefined,
       allowanceIsLoading: false,
+      refetchAllowance: () => {},
     };
   }
 
   return {
     needsApproval,
     currentAllowance,
+    formattedCurrentAllowance,
     allowanceError,
     allowanceIsLoading,
+    refetchAllowance,
   };
 };

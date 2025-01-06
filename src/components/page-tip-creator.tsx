@@ -75,12 +75,12 @@ export function Tip() {
   const { isLoading, profile, error } = useProfileBySlug(slug);
 
   // Check spending limit, is approval required?
-  const { needsApproval } = useApprovalCheck({
-    selectedAmount: amountInSelectedToken,
-    selectedCurrency,
-  });
+  const { needsApproval, formattedCurrentAllowance, refetchAllowance } =
+    useApprovalCheck({
+      selectedAmount: amountInSelectedToken,
+      selectedCurrency,
+    });
 
-  // TODO: After approval, trigger check again
   const { triggerApprove } = useApproveSpend({
     totalAmount: amountInSelectedToken,
     address: selectedCurrency.address,
@@ -103,52 +103,53 @@ export function Tip() {
     return <div className="text-center">Error</div>;
   }
 
+  const handleApprove = async () => {
+    setIsPending(true);
+
+    executeWithConnectionCheck(async () => {
+      try {
+        const hash = await triggerApprove();
+        console.log("approvalTx", hash);
+        await refetchAllowance();
+        setIsPending(false);
+      } catch (error) {
+        console.error("Approval error:", error);
+        setIsPending(false);
+      }
+    });
+  };
+
   const handleTip = async () => {
     setIsPending(true);
 
-    if (amountInSelectedToken === "0") {
+    if (Number(amountInSelectedToken) === 0.0) {
       setIsPending(false);
       console.log("Please enter an amount greater than 0");
-      // toast.error("Please enter an amount greater than 0");
       return;
     }
 
     executeWithConnectionCheck(async () => {
       try {
-        // For ERC20 tokens, handle approval first
-        if (selectedCurrency.symbol !== "ETH" && needsApproval) {
-          const hash = await triggerApprove();
-          console.log("approvalTx", hash);
-        }
-
-        // Handle the actual transfer
+        // Handle the transfer based on currency type
         if (selectedCurrency.symbol === "ETH") {
           const { success, tx } = await sendEthTip(
             profile.wallet_address,
             parseUnits(amountInSelectedToken, selectedCurrency.decimals)
           );
 
-          if (!success) {
-            throw new Error("ETH transfer failed");
-          }
-
+          if (!success) throw new Error("ETH transfer failed");
           console.log("tx", tx);
         } else {
           const { success, tx } = await sendTip(
             selectedCurrency.address,
             profile.wallet_address,
-
             parseUnits(amountInSelectedToken, selectedCurrency.decimals)
           );
 
-          if (!success) {
-            throw new Error("Token transfer failed");
-          }
-
+          if (!success) throw new Error("Token transfer failed");
           console.log("tx", tx);
         }
 
-        // If we get here, the transaction was successful
         setIsPending(false);
         fireAllMoney({ scalar: 4 });
       } catch (error) {
@@ -208,15 +209,30 @@ export function Tip() {
 
       {isConnected && hasNative && (
         <>
-          {needsApproval && (
-            <div className="text-red-500 text-xs text-center my-2 text-balance">
-              For security reasons, you will be asked to approve a spending cap.
-            </div>
+          {needsApproval ? (
+            <>
+              <div className="text-red-500 text-xs text-center my-2 text-balance leading-5">
+                <p>For security reasons, you need to approve spending first.</p>
+                <p>
+                  Your current spending limit is{" "}
+                  <span className="font-bold">
+                    {formattedCurrentAllowance} {selectedCurrency.symbol}
+                  </span>
+                </p>
+              </div>
+              <Button
+                onClick={handleApprove}
+                disabled={isPending}
+                className="w-full"
+              >
+                {isPending ? "Approving..." : "Approve"}
+              </Button>
+            </>
+          ) : (
+            <Button onClick={handleTip} disabled={isPending} className="w-full">
+              {isPending ? "Sending..." : "Send Tip"}
+            </Button>
           )}
-
-          <Button onClick={handleTip} disabled={isPending} className="w-full">
-            {isPending ? "Sending..." : "Send Tip"}
-          </Button>
 
           <Link
             className="text-sm text-muted-foreground text-center block my-3"
