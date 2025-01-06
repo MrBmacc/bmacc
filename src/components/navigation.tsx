@@ -1,8 +1,9 @@
 import { useDisconnect } from "wagmi";
 import { Search, User2, UserPlus, LogOut } from "lucide-react";
 
-import { truncateAddress } from "@/utils/truncate-address";
 import useStore from "@/stores/app.store";
+
+import { truncateAddress } from "@/utils/truncate-address";
 import { useProfileStatus } from "@/hooks/use-profile-status";
 
 import { Button } from "@/components/ui/button";
@@ -38,24 +39,15 @@ export function Navigation() {
             </Button>
 
             {!isConnected && !hasProfile && (
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <ButtonModal
-                      size="icon"
-                      variant="ghost"
-                      screen="Connect"
-                      className="relative overflow-hidden flex items-center gap-3 rounded-full w-8 h-8"
-                    >
-                      <User2 size={20} />
-                      <span className="sr-only">Connect</span>
-                    </ButtonModal>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Connect</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <ButtonModal
+                size="icon"
+                variant="ghost"
+                screen="Connect"
+                className="relative overflow-hidden flex items-center gap-3 rounded-full w-8 h-8 ring-2 ring-white"
+              >
+                <User2 size={20} />
+                <span className="sr-only">Connect</span>
+              </ButtonModal>
             )}
 
             {isConnected && hasProfile && (
