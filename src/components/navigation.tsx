@@ -59,7 +59,9 @@ export function Navigation() {
         <div className="flex justify-between h-16">
           <a href="/" className="flex items-center">
             <img alt="BMACC" className="w-8 h-8" src="/images/bmacc-logo.png" />
-            <span className="ml-2 text-3xl font-bold text-white">BMACC</span>
+            <span className="ml-2 text-4xl font-brand text-white font-bold">
+              BMACC
+            </span>
           </a>
           <div className="flex items-center gap-2">
             <Button

@@ -19,10 +19,10 @@ export function LandingPage() {
       <div className="flex md:mt-16 mt-0 flex-col md:flex-row-reverse justify-between gap-8">
         {/* Hero Section */}
         <div className=" px-4 py-8 relative flex-1">
-          <h1 className="text-7xl md:text-9xl font-bold text-blue-950 tracking-tighter">
+          <h1 className="text-7xl md:text-9xl font-bold text-blue-950 tracking-tighter font-brand">
             BMACC
           </h1>
-          <h2 className="text-white font-bold text-4xl md:text-6xl">
+          <h2 className="text-white font-bold text-4xl md:text-6xl font-brand">
             BUY ME A CRYPTO COFFEE
           </h2>
 

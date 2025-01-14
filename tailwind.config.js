@@ -13,6 +13,9 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        brand: ['"Oswald"'],
+      },
       keyframes: {
         "accordion-down": {
           from: {
