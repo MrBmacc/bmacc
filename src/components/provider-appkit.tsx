@@ -2,7 +2,7 @@ import { WagmiProvider } from "wagmi";
 
 import { createAppKit } from "@reown/appkit/react";
 import { WagmiAdapter } from "@reown/appkit-adapter-wagmi";
-import { mainnet, base } from "@reown/appkit/networks";
+import { base } from "@reown/appkit/networks";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
@@ -17,7 +17,7 @@ const metadata = {
   icons: ["https://bmacc.netlify.app/images/bmacc-logo.png"],
 };
 
-const networks = [mainnet, base];
+const networks = [base];
 
 const wagmiAdapter = new WagmiAdapter({
   networks,
