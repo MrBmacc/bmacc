@@ -28,8 +28,8 @@ type UserBalances = {
   hasNative: boolean;
   hasUsdc: boolean;
   hasBmacc: boolean;
-  isLoading: boolean;
-  isError: boolean;
+  isLoadingUserBalance: boolean;
+  isErrorUserBalance: boolean;
 };
 
 export const useUserBalance = (): UserBalances => {
@@ -115,8 +115,9 @@ export const useUserBalance = (): UserBalances => {
     hasNative,
     hasUsdc,
     hasBmacc,
-    isLoading:
+    isLoadingUserBalance:
       nativeBalance.isLoading || bmaccResult.isLoading || usdcResult.isLoading,
-    isError: nativeBalance.isError || bmaccResult.isError || usdcResult.isError,
+    isErrorUserBalance:
+      nativeBalance.isError || bmaccResult.isError || usdcResult.isError,
   };
 };

@@ -13,12 +13,31 @@ export const CreatorHistory = ({ profile }: { profile: Profile }) => {
   );
 
   if (isHistoryLoading || isTokenPricesLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex flex-col w-full divide-y divide-gray-200">
+        {[1, 2, 3, 4].map((i) => (
+          <div
+            key={i}
+            className="flex items-center justify-between w-full py-2"
+          >
+            <Skeleton className="h-4 w-20" />
+            <Skeleton className="h-4 w-16" />
+          </div>
+        ))}
+      </div>
+    );
   }
 
   if (isHistoryError) {
-    return <div>Error loading history</div>;
+    return (
+      <div className="flex flex-col items-center justify-center w-full py-8 text-gray-500">
+        <p className="text-sm">Unable to load transaction history</p>
+        <p className="text-xs mt-1">Please try again later</p>
+      </div>
+    );
   }
+
+  console.log("tips", tips);
 
   const totalUsdTips = Object.entries(tips).reduce((acc, [key, tip]) => {
     return acc + tip.formatted * tokenPrices[key].usdPrice;

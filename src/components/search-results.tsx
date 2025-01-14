@@ -1,4 +1,4 @@
-import { CreatorCard } from "@/components/creator-card";
+import { SearchCard } from "@/components/search-card";
 import { SearchSkeleton } from "@/components/search-skeleton";
 
 import type { Profile } from "@/lib/supabase";
@@ -28,7 +28,7 @@ export const SearchResults = ({
         </div>
         <div className="space-y-2">
           {results.map((creator) => (
-            <CreatorCard key={creator.id} creator={creator} onClose={onClose} />
+            <SearchCard key={creator.id} creator={creator} onClose={onClose} />
           ))}
         </div>
       </div>

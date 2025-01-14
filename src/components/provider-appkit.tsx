@@ -13,8 +13,8 @@ const metadata = {
   name: "Buy me a crypto coffee | BMACC",
   description:
     "A decentralized way to show appreciation to your favorite creators with cryptocurrency tips on Base",
-  url: "https://bmacc.io",
-  icons: [""],
+  url: "https://bmacc.netlify.app",
+  icons: ["https://bmacc.netlify.app/images/bmacc-logo.png"],
 };
 
 const networks = [mainnet, base];

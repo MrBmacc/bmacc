@@ -29,7 +29,13 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 export function Tip() {
   const { isConnected } = useAccount();
   const [isPending, setIsPending] = useState(false);
-  const { hasNative, hasUsdc, hasBmacc } = useUserBalance();
+  const {
+    hasNative,
+    hasUsdc,
+    hasBmacc,
+    isLoadingUserBalance,
+    isErrorUserBalance,
+  } = useUserBalance();
 
   const [selectedCurrency, setSelectedCurrency] = useState(currencies[0]);
   const [selectedAmount, setSelectedAmount] = useState(tipAmounts[0].amount);
@@ -41,6 +47,19 @@ export function Tip() {
   const { executeWithConnectionCheck } = useConnectionCheck({
     desiredChainId: 8453,
   });
+
+  // Compute the amount in USD
+  const amountInSelectedToken = useMemo(() => {
+    if (!tokenPrices[selectedCurrency.symbol]) return "0";
+    return (
+      Number(selectedAmount) / tokenPrices[selectedCurrency.symbol].usdPrice
+    ).toFixed(selectedCurrency.decimals);
+  }, [
+    tokenPrices,
+    selectedCurrency.symbol,
+    selectedCurrency.decimals,
+    selectedAmount,
+  ]);
 
   useEffect(() => {
     const availableCurrencies = currencies.filter((currency) => {
@@ -58,21 +77,12 @@ export function Tip() {
     setSelectedCurrency(availableCurrencies[0] || currencies[0]);
   }, [hasNative, hasUsdc, hasBmacc]);
 
-  // Compute the amount in USD
-  const amountInSelectedToken = useMemo(() => {
-    if (!tokenPrices[selectedCurrency.symbol]) return "0";
-    return (
-      Number(selectedAmount) / tokenPrices[selectedCurrency.symbol].usdPrice
-    ).toFixed(selectedCurrency.decimals);
-  }, [
-    tokenPrices,
-    selectedCurrency.symbol,
-    selectedCurrency.decimals,
-    selectedAmount,
-  ]);
-
   // Get the recipient address from the database
-  const { isLoading, profile, error } = useProfileBySlug(slug);
+  const {
+    isLoading: isLoadingProfile,
+    profile,
+    error,
+  } = useProfileBySlug(slug);
 
   // Check spending limit, is approval required?
   const { needsApproval, formattedCurrentAllowance, refetchAllowance } =
@@ -95,7 +105,7 @@ export function Tip() {
   }, [sendTipError, sendEthTipError]);
 
   // If not enough eth for gas, set hasEthForGas to false
-  if (isLoading) {
+  if (isLoadingProfile) {
     return <PageLoader />;
   }
 
@@ -110,10 +120,16 @@ export function Tip() {
       try {
         const hash = await triggerApprove();
         console.log("approvalTx", hash);
-        await refetchAllowance();
-        setIsPending(false);
+
+        // Optional: Add additional verification
+        if (hash) {
+          console.log("Waiting for confirmation...");
+          setIsPending(false);
+        }
       } catch (error) {
-        console.error("Approval error:", error);
+        console.error("Approval failed:", error);
+        // Optionally reset the approval state
+        // reset();
         setIsPending(false);
       }
     });
@@ -160,9 +176,10 @@ export function Tip() {
   };
 
   return (
-    <Card className="max-w-md mx-auto shadow-xl sm:p-6 z-10 relative p-4">
+    <Card className="max-w-md mx-auto shadow-xl sm:p-6 z-10 relative p-4 min-h-[80svh] md:min-h-0">
       <CreatorHeader profile={profile} />
-      <div className="text-center mb-6 mt-16">
+
+      <div className="text-center mb-6 mt-24">
         <h2 className="text-2xl font-bold text-gray-800">Buy me a coffee</h2>
       </div>
 
@@ -179,8 +196,8 @@ export function Tip() {
             onClick={() => setSelectedAmount(amount)}
             className={`w-full p-4 rounded-lg border-2 transition-all ${
               selectedAmount === amount
-                ? "border-teal-300 bg-teal-50"
-                : "border-gray-200 hover:border-teal-400"
+                ? "border-blue-950 bg-teal-50"
+                : "border-gray-200 hover:border-blue-950"
             }`}
           >
             <div className="flex justify-between items-center">
@@ -189,11 +206,11 @@ export function Tip() {
             </div>
           </button>
         ))}
-        <div className="text-gray-500 w-full py-2 px-4 rounded-lg border-2 flex items-center justify-center gap-6 focus-within:ring-2 focus-within:ring-teal-300">
+        <div className="text-gray-500 w-full py-2 px-4 rounded-lg border-2 flex items-center justify-center gap-6 focus-within:ring-2 focus-within:ring-blue-950 hover:ring-2 hover:ring-blue-950">
           <Input
             type="number"
             placeholder="Custom amount"
-            className="w-full border-none mb-0 shadow-none placeholder:font-medium pl-1 placeholder:text-gray-800 placeholder:text-base"
+            className="w-full border-none mb-0 shadow-none placeholder:font-medium pl-1 placeholder:text-gray-800 placeholder:text-base focus-visible:ring-0 focus-visible:ring-offset-0"
             min={1}
             onChange={(e) => setSelectedAmount(e.target.value)}
           />
@@ -233,18 +250,18 @@ export function Tip() {
               {isPending ? "Sending..." : "Send Tip"}
             </Button>
           )}
-
-          <Link
-            className="text-sm text-muted-foreground text-center block my-3"
-            to="/profile/$slug"
-            params={{ slug: profile.slug }}
-          >
-            View {profile.username}'s Profile
-          </Link>
         </>
       )}
 
-      {isConnected && !hasNative && (
+      <Link
+        className="text-sm text-muted-foreground text-center block my-3"
+        to="/profile/$slug"
+        params={{ slug: profile.slug }}
+      >
+        View {profile.username}'s Profile
+      </Link>
+
+      {isConnected && !hasNative && !isLoadingUserBalance && (
         <Alert variant="destructive" className="bg-red-300/10 text-center">
           <AlertTitle>Oh dang!</AlertTitle>
           <AlertDescription className="text-balance">

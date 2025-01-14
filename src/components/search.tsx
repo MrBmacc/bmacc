@@ -16,7 +16,7 @@ import { useToast } from "@/hooks/use-toast";
 import { searchCreators } from "@/lib/api";
 import type { Profile } from "@/lib/supabase";
 
-export function CreatorSearch() {
+export function Search() {
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = React.useState("");
   const [results, setResults] = React.useState<Profile[]>([]);
@@ -74,7 +74,7 @@ export function CreatorSearch() {
 
   return (
     <Dialog open={isSearchOpen} onOpenChange={setIsSearchOpen}>
-      <DialogContent className="sm:max-w-2xl md:h-[calc(50svh)] h-svh w-svw flex flex-col bg-white/90 backdrop-blur-sm">
+      <DialogContent className="sm:max-w-2xl md:h-[calc(50svh)] h-svh w-svw flex flex-col bg-white ring-2 ring-blue-950 backdrop-blur-sm">
         <DialogHeader>
           <DialogTitle>Find Creator</DialogTitle>
         </DialogHeader>

@@ -1,9 +1,11 @@
 import React from "react";
 
-import { Coffee, Search, UserPlus, ArrowRight } from "lucide-react";
+import { Coffee, Search, UserPlus, Send } from "lucide-react";
 
 import useStore from "@/stores/app.store";
-import landingPageBg from "@/assets/coffee-shop-2.png";
+// import landingPageBg from "@/assets/coffee-shop-2.png";
+import character from "@/assets/bmacc-character.png";
+
 import { useProfileStatus } from "@/hooks/use-profile-status";
 
 import { Button } from "@/components/ui/button";
@@ -14,31 +16,29 @@ export function LandingPage() {
   const { setIsSearchOpen } = useStore();
   const { isConnected, isLoading, hasProfile, profile } = useProfileStatus();
   return (
-    <div className="relative flex flex-col min-h-[calc(100svh-12rem)] isolate">
-      <img
-        src={landingPageBg}
-        alt="Buy me a crypto coffee"
-        className="w-full object-cover absolute inset-0 m-auto max-w-4xl h-auto [mask-image:radial-gradient(40rem_40rem_at_center,#27272a,transparent)] animate-fade-in"
-      />
+    <div className="relative flex flex-col min-h-[calc(100svh-12rem)] isolate ">
+      <div className="flex mt-16">
+        <img
+          src={character}
+          alt="Buy me a crypto coffee"
+          className="w-80 h-auto"
+        />
 
-      {/* Hero Section */}
-      <div className="flex-1  px-4 py-16 relative">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="relative">
-            <h1 className="text-3xl text-balance sm:text-5xl font-bold text-teal-900 mb-6">
-              BUY ME A CRYPTO COFFEE
-            </h1>
-            <h1 className="text-3xl text-balance sm:text-5xl font-bold mb-6 absolute -top-1 left-0 right-0 bg-gradient-to-b from-teal-200 to-teal-300 bg-clip-text text-transparent">
-              BUY ME A CRYPTO COFFEE
-            </h1>
-          </div>
+        {/* Hero Section */}
+        <div className="flex-1 px-4 py-8 relative">
+          <h1 className="text-9xl font-bold text-blue-950 tracking-tighter">
+            BMACC
+          </h1>
+          <h2 className="text-white font-bold text-6xl">
+            BUY ME A CRYPTO COFFEE
+          </h2>
 
-          <p className="sm:text-xl text-gray-600 mb-8 max-w-md mx-auto text-balance">
-            A decentralized way to show appreciation to your favorite creators
-            with cryptocurrency tips on Base
+          <p className="sm:text-xl text-gray-600 mb-8 max-w-xl my-6">
+            Go beyond likes and hearts, show real appreciation to your favorite
+            creators with cryptocurrency tips. Powered by Base.
           </p>
 
-          <div className="flex flex-row gap-4 justify-center">
+          <div className="flex flex-row gap-4">
             {isLoading && (
               <Button disabled={true} className="animate-pulse w-36">
                 Checking profile...
@@ -48,7 +48,7 @@ export function LandingPage() {
             {!isLoading && !isConnected && <ButtonCreateProfile />}
 
             {!isLoading && isConnected && !hasProfile && (
-              <Button className="w-36" asChild>
+              <Button className="w-1/4" asChild>
                 <a href="/create">
                   <UserPlus size={20} />
                   Create Profile
@@ -57,7 +57,7 @@ export function LandingPage() {
             )}
 
             {!isLoading && isConnected && hasProfile && (
-              <Button className="w-36" asChild>
+              <Button className="w-1/4" asChild>
                 <a href={`/profile/${profile?.slug}`}>
                   <UserPlus size={20} />
                   View Profile
@@ -65,11 +65,9 @@ export function LandingPage() {
               </Button>
             )}
 
-            <Button
-              variant="brand"
-              className="w-36"
-              onClick={() => setIsSearchOpen(true)}
-            >
+            <span className="text-white text-xl italic">or</span>
+
+            <Button className="w-1/4" onClick={() => setIsSearchOpen(true)}>
               <Search size={20} />
               Find Creator
             </Button>
@@ -78,26 +76,23 @@ export function LandingPage() {
       </div>
 
       {/* Features Section */}
-      <div className="py-16 px-4 relative">
+      <div className="pb-16 px-4 relative">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-3 gap-8">
             <FeatureCard
               title="Create Profile"
-              number="1"
               description="Set up your tipping profile in seconds with your social media accounts or crypto wallet"
-              icon={<UserPlus className="text-zinc-800" size={24} />}
+              icon={<UserPlus className="text-zinc-800" size={36} />}
             />
             <FeatureCard
               title="Share Link"
-              number="2"
               description="Get a unique link and QR code to receive tips from your supporters"
-              icon={<ArrowRight className="text-zinc-800" size={24} />}
+              icon={<Send className="text-zinc-800" size={36} />}
             />
             <FeatureCard
               title="Receive Tips"
-              number="3"
               description="Get supported with crypto tips directly to your wallet on Base"
-              icon={<Coffee className="text-zinc-800" size={24} />}
+              icon={<Coffee className="text-zinc-800" size={36} />}
             />
           </div>
         </div>
@@ -108,25 +103,22 @@ export function LandingPage() {
 
 function FeatureCard({
   title,
-  number,
+
   description,
   icon,
 }: {
   title: string;
-  number: string;
+
   description: string;
   icon: React.ReactNode;
 }) {
   return (
-    <Card className="relative bg-gradient-to-br from-stone-200/80 to-stone-400/60 bg-transparent border-none border-t border-stone-100 ring ring-teal-400 shadow-sm shadow-zinc-800">
-      <div className="absolute -top-1 -right-2 rounded bg-stone-300 text-zinc-800 px-4 py-2 text-xs font-medium shadow-sm shadow-stone-700 zoom-in fill-mode-forwards delay-1000">
-        <span className="text-zinc-600 font-bold text-xl">{number}</span>
-      </div>
-      <CardHeader className="flex flex-row items-center gap-4 space-y-0">
+    <Card className="relative bg-white border-blue-950 border-2">
+      <CardHeader className="flex flex-col items-center gap-4 space-y-0">
         {icon}
         <h3 className="text-xl font-semibold text-gray-900">{title}</h3>
       </CardHeader>
-      <CardContent>
+      <CardContent className="text-center">
         <p className="text-gray-600">{description}</p>
       </CardContent>
     </Card>

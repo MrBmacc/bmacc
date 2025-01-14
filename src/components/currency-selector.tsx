@@ -64,9 +64,8 @@ const CurrencySelector = ({
 
   return (
     <div className="mb-6">
-      <label className="block text-sm font-medium text-gray-700 mb-2">
-        Select Currency
-      </label>
+      <label className="sr-only">Select Currency</label>
+
       <div className="grid grid-cols-3 gap-2">
         <TooltipProvider>
           {currencies.map((currency: Currency) => {
@@ -85,8 +84,8 @@ const CurrencySelector = ({
                         isDisabled
                           ? "border-gray-200 bg-gray-50 opacity-50 cursor-not-allowed"
                           : selectedCurrency.symbol === currency.symbol
-                            ? "border-teal-300 bg-teal-50"
-                            : "border-gray-200 hover:border-teal-400"
+                            ? "border-blue-950 bg-teal-50"
+                            : "border-gray-200 hover:border-blue-950"
                       }`}
                     >
                       <img

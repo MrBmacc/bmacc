@@ -21,24 +21,26 @@ export function Navigation() {
   const { hasProfile, isConnected, profile } = useProfileStatus();
 
   return (
-    <nav className="sticky top-0 z-50 bg-sky-300 rounded-t-2xl [mask-image:linear-gradient(to_bottom,black_70%,transparent)]">
+    <nav className="sticky top-0 z-50 bg-brand-alt rounded-t-2xl ">
+      <div className="absolute inset-x-0 bg-gradient-to-r from-transparent via-white to-transparent w-full bottom-0 h-px"></div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <a href="/" className="flex items-center">
             <img alt="BMACC" className="w-8 h-8" src="/images/bmacc-logo.png" />
-            <span className="ml-2 text-xl font-bold text-gray-800">BMACC</span>
+            <span className="ml-2 text-3xl font-bold text-white">BMACC</span>
           </a>
           <div className="flex items-center gap-2">
             <Button
               size="icon"
+              variant="brand"
               onClick={() => setIsSearchOpen(true)}
-              className="rounded-full w-8 h-8 ring-2 ring-cyan-100 text-cyan-900"
+              className="rounded-full w-8 h-8"
             >
               <Search size={20} />
               <span className="sr-only">Find Creator</span>
             </Button>
 
-            {!isConnected && !hasProfile && (
+            {!isConnected && (
               <ButtonModal
                 size="icon"
                 variant="ghost"
@@ -97,15 +99,24 @@ export function Navigation() {
             )}
 
             {isConnected && (
-              <Button
-                size="icon"
-                variant="ghost"
-                className="rounded-full w-8 h-8"
-                onClick={() => disconnect()}
-              >
-                <LogOut size={20} />
-                <span className="sr-only">Disconnect</span>
-              </Button>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="rounded-full w-8 h-8"
+                      onClick={() => disconnect()}
+                    >
+                      <LogOut size={20} />
+                      <span className="sr-only">Disconnect</span>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Disconnect wallet</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             )}
           </div>
         </div>

@@ -39,8 +39,6 @@ import { ButtonCopyClipboard } from "@/components/button-copy-clipboard";
 
 import { truncateAddress } from "@/utils/truncate-address";
 
-import coffeeCup from "@/assets/takeaway-coffee.png";
-
 export function ProfilePage() {
   const { slug } = useParams({ from: "/profile/$slug" });
   const { address, isConnected } = useAccount();
@@ -133,7 +131,7 @@ export function ProfilePage() {
     address?.toLowerCase() === profile.wallet_address.toLowerCase();
 
   return (
-    <Card className="max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-xl relative animate-in slide-in-from-top ease-in-out z-10 pb-20">
+    <Card className="max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-xl relative animate-in slide-in-from-top ease-in-out pb-20 min-h-[80svh] md:min-h-0">
       <CreatorHeader profile={profile} />
       {isOwner && (
         <DropdownMenu>
@@ -163,20 +161,18 @@ export function ProfilePage() {
         </DropdownMenu>
       )}
 
-      <div className="flex flex-col gap-2 justify-center items-center mt-20 mb-10">
+      <div className="flex flex-col gap-2 justify-center items-center mt-24 mb-10">
         <h1 className="text-2xl font-bold text-gray-800">
           {isOwner
             ? `Your Profile (${profile.username})`
-            : `${profile.username}'s`}
+            : `${profile.username}'s profile`}
         </h1>
 
         <p className="text-gray-600 text-balance text-center">{profile.bio}</p>
       </div>
 
-      <div className="bg-gradient-to-r from-purple-50 to-blue-50 p-4 rounded-xl mb-6">
-        <div className="flex flex-col items-center justify-center space-x-6">
-          <QRCodeSVG value={profileUrl} />
-        </div>
+      <div className="flex flex-col items-center justify-center mb-6">
+        <QRCodeSVG value={profileUrl} />
       </div>
 
       {isOwner && (
@@ -208,29 +204,21 @@ export function ProfilePage() {
         </>
       )}
 
-      {!isOwner && (
-        <Button
-          asChild
-          className="w-[99%] py-6 text-lg  inset-x-0 absolute bottom-1 mx-auto "
-        >
-          <Link to="/tip/$slug" params={{ slug }}>
-            <img
-              src={coffeeCup}
-              alt="Coffee cup"
-              className="sm:w-20 w-16 h-auto mr-2 -rotate-6 absolute sm:-top-4 -top-2 sm:left-1/4 left-6"
-            />
-            <span className="pl-6">BUY ME A COFFEE</span>
-          </Link>
-        </Button>
-      )}
-
-      <div className="flex justify-center gap-6 my-6 items-center ring-1 ring-gray-200 rounded-lg p-0.5">
+      <div className="flex justify-center gap-6 my-6 items-center ring-1 ring-blue-950 rounded-2xl p-0.5">
         <p className="text-gray-600 break-all text-xs">{profileUrl}</p>
         <ButtonCopyClipboard text={profileUrl}>
           <Copy size={16} />
           <span className="sr-only">Copy Link</span>
         </ButtonCopyClipboard>
       </div>
+
+      {!isOwner && (
+        <Button asChild className="w-full py-6 text-lg">
+          <Link to="/tip/$slug" params={{ slug }}>
+            <span className="pl-6">Buy me a coffee</span>
+          </Link>
+        </Button>
+      )}
 
       <EditProfileDialog
         isOpen={isEditOpen}
