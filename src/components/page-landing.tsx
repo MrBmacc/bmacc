@@ -15,10 +15,10 @@ export function LandingPage() {
   const { setIsSearchOpen } = useStore();
   const { isConnected, isLoading, hasProfile, profile } = useProfileStatus();
   return (
-    <div className="relative flex flex-col  isolate ">
-      <div className="flex md:mt-16 mt-0 flex-col md:flex-row-reverse">
+    <div className="relative flex flex-col">
+      <div className="flex md:mt-16 mt-0 flex-col md:flex-row-reverse justify-between gap-8">
         {/* Hero Section */}
-        <div className="flex-1 px-4 py-8 relative">
+        <div className=" px-4 py-8 relative flex-1">
           <h1 className="text-7xl md:text-9xl font-bold text-blue-950 tracking-tighter">
             BMACC
           </h1>
@@ -28,12 +28,19 @@ export function LandingPage() {
 
           <p className="sm:text-xl text-gray-600 mb-8 max-w-xl my-6">
             Go beyond likes and hearts, show real appreciation to your favorite
-            creators with cryptocurrency tips. Powered by Base.
+            creators with cryptocurrency tips.{" "}
+            <a
+              href="https://www.base.org/"
+              target="_blank"
+              className="underline"
+            >
+              Powered by Base.
+            </a>
           </p>
 
-          <div className="flex flex-row gap-4">
+          <div className="flex flex-row gap-4 flex-wrap">
             {isLoading && (
-              <Button disabled={true} className="animate-pulse w-44">
+              <Button disabled={true} className="animate-pulse sm:w-44 w-full">
                 Checking profile...
               </Button>
             )}
@@ -41,7 +48,7 @@ export function LandingPage() {
             {!isLoading && !isConnected && <ButtonCreateProfile />}
 
             {!isLoading && isConnected && !hasProfile && (
-              <Button className="w-44" asChild>
+              <Button className="sm:w-44 w-full" asChild>
                 <a href="/create">
                   <UserPlus size={20} />
                   Create Profile
@@ -50,7 +57,7 @@ export function LandingPage() {
             )}
 
             {!isLoading && isConnected && hasProfile && (
-              <Button className="w-44" asChild>
+              <Button className="sm:w-44 w-full" asChild>
                 <a href={`/profile/${profile?.slug}`}>
                   <UserPlus size={20} />
                   View Profile
@@ -58,9 +65,14 @@ export function LandingPage() {
               </Button>
             )}
 
-            <span className="text-white text-xl italic">or</span>
+            <span className="text-white text-xl italic hidden md:block">
+              or
+            </span>
 
-            <Button className="w-44" onClick={() => setIsSearchOpen(true)}>
+            <Button
+              className="sm:w-44 w-full"
+              onClick={() => setIsSearchOpen(true)}
+            >
               <Search size={20} />
               Find Creator
             </Button>
