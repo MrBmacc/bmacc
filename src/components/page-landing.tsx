@@ -3,7 +3,6 @@ import React from "react";
 import { Coffee, Search, UserPlus, Send } from "lucide-react";
 
 import useStore from "@/stores/app.store";
-// import landingPageBg from "@/assets/coffee-shop-2.png";
 import character from "@/assets/bmacc-character.png";
 
 import { useProfileStatus } from "@/hooks/use-profile-status";
@@ -16,20 +15,14 @@ export function LandingPage() {
   const { setIsSearchOpen } = useStore();
   const { isConnected, isLoading, hasProfile, profile } = useProfileStatus();
   return (
-    <div className="relative flex flex-col min-h-[calc(100svh-12rem)] isolate ">
-      <div className="flex mt-16">
-        <img
-          src={character}
-          alt="Buy me a crypto coffee"
-          className="w-80 h-auto"
-        />
-
+    <div className="relative flex flex-col  isolate ">
+      <div className="flex md:mt-16 mt-0 flex-col md:flex-row-reverse">
         {/* Hero Section */}
         <div className="flex-1 px-4 py-8 relative">
-          <h1 className="text-9xl font-bold text-blue-950 tracking-tighter">
+          <h1 className="text-7xl md:text-9xl font-bold text-blue-950 tracking-tighter">
             BMACC
           </h1>
-          <h2 className="text-white font-bold text-6xl">
+          <h2 className="text-white font-bold text-4xl md:text-6xl">
             BUY ME A CRYPTO COFFEE
           </h2>
 
@@ -40,7 +33,7 @@ export function LandingPage() {
 
           <div className="flex flex-row gap-4">
             {isLoading && (
-              <Button disabled={true} className="animate-pulse w-36">
+              <Button disabled={true} className="animate-pulse w-44">
                 Checking profile...
               </Button>
             )}
@@ -48,7 +41,7 @@ export function LandingPage() {
             {!isLoading && !isConnected && <ButtonCreateProfile />}
 
             {!isLoading && isConnected && !hasProfile && (
-              <Button className="w-1/4" asChild>
+              <Button className="w-44" asChild>
                 <a href="/create">
                   <UserPlus size={20} />
                   Create Profile
@@ -57,7 +50,7 @@ export function LandingPage() {
             )}
 
             {!isLoading && isConnected && hasProfile && (
-              <Button className="w-1/4" asChild>
+              <Button className="w-44" asChild>
                 <a href={`/profile/${profile?.slug}`}>
                   <UserPlus size={20} />
                   View Profile
@@ -67,16 +60,22 @@ export function LandingPage() {
 
             <span className="text-white text-xl italic">or</span>
 
-            <Button className="w-1/4" onClick={() => setIsSearchOpen(true)}>
+            <Button className="w-44" onClick={() => setIsSearchOpen(true)}>
               <Search size={20} />
               Find Creator
             </Button>
           </div>
         </div>
+
+        <img
+          src={character}
+          alt="Buy me a crypto coffee"
+          className="w-80 h-auto"
+        />
       </div>
 
       {/* Features Section */}
-      <div className="pb-16 px-4 relative">
+      <div className="pb-8 px-4 relative">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-3 gap-8">
             <FeatureCard

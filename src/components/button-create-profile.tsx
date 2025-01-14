@@ -32,7 +32,7 @@ export const ButtonCreateProfile = ({
   return (
     <ButtonModal
       screen="Connect"
-      className="relative overflow-hidden flex items-center gap-3"
+      className="relative overflow-hidden flex items-center gap-3 w-44"
     >
       <motion.div
         animate="animate"

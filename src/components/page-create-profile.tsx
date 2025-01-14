@@ -14,8 +14,14 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { PageLoader } from "@/components/ui/page-loader";
-import { Card, CardContent } from "@/components/ui/card";
 import { ButtonCreateProfile } from "@/components/button-create-profile";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 
 export function CreateProfile() {
   const navigate = useNavigate();
@@ -173,137 +179,130 @@ export function CreateProfile() {
   }
 
   return (
-    <Card className="max-w-2xl mx-auto shadow-xl relative z-10">
+    <Card className="max-w-2xl mx-auto">
+      <CardHeader>
+        <CardTitle className="text-2xl">Create your profile</CardTitle>
+        <CardDescription>
+          Set up your creator profile to start receiving tips
+        </CardDescription>
+      </CardHeader>
       <CardContent>
-        <div className="space-y-6 mt-6">
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight">
-              Create Your Profile
-            </h1>
-            <p className="text-gray-500">
-              Set up your creator profile to start receiving tips
-            </p>
-          </div>
-
-          <Separator />
-
-          <form onSubmit={handleSubmit} className="space-y-8">
-            <div className="space-y-6">
-              <div className="flex flex-col items-center space-y-4">
-                <div className="relative">
-                  <div className="w-32 h-32 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center border-2 border-dashed border-gray-300">
-                    {formData.imageUrl ? (
-                      <img
-                        src={formData.imageUrl}
-                        alt="Profile"
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <ImagePlus className="w-8 h-8 text-gray-400" />
-                    )}
-                  </div>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    className="hidden"
-                  />
-                  <Button
-                    size="sm"
-                    type="button"
-                    variant="outline"
-                    className="absolute bottom-0 right-0"
-                    onClick={() => fileInputRef.current?.click()}
-                    disabled={isUploading}
-                  >
-                    {isUploading ? (
-                      <>
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        Uploading
-                      </>
-                    ) : (
-                      "Change"
-                    )}
-                  </Button>
+        <form onSubmit={handleSubmit} className="space-y-8">
+          <div className="space-y-6">
+            <div className="flex flex-col items-center space-y-4">
+              <div className="relative">
+                <div className="w-32 h-32 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center border-2 border-dashed border-gray-300">
+                  {formData.imageUrl ? (
+                    <img
+                      src={formData.imageUrl}
+                      alt="Profile"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <ImagePlus className="w-8 h-8 text-gray-400" />
+                  )}
                 </div>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="hidden"
+                />
+                <Button
+                  size="sm"
+                  type="button"
+                  variant="outline"
+                  className="absolute bottom-0 right-0"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={isUploading}
+                >
+                  {isUploading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Uploading
+                    </>
+                  ) : (
+                    "Change"
+                  )}
+                </Button>
+              </div>
+              <p className="text-sm text-gray-500">
+                Upload a profile picture or avatar
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="username">Username</Label>
+                <Input
+                  id="username"
+                  placeholder="@username"
+                  value={formData.username}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      username: e.target.value,
+                    }))
+                  }
+                  required
+                />
                 <p className="text-sm text-gray-500">
-                  Upload a profile picture or avatar
+                  This will be your username and will be used to identify you on
+                  the platform.
+                </p>
+                <p className="text-sm text-gray-500">
+                  Do not include the @ symbol.
                 </p>
               </div>
 
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="username">Username</Label>
-                  <Input
-                    id="username"
-                    placeholder="@username"
-                    value={formData.username}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        username: e.target.value,
-                      }))
-                    }
-                    required
-                  />
-                  <p className="text-sm text-gray-500">
-                    This will be your username and will be used to identify you
-                    on the platform.
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    Do not include the @ symbol.
-                  </p>
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="bio">Bio</Label>
+                <textarea
+                  id="bio"
+                  placeholder="Tell others about yourself..."
+                  value={formData.bio}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, bio: e.target.value }))
+                  }
+                  className="min-h-[100px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                  required
+                />
+              </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="bio">Bio</Label>
-                  <textarea
-                    id="bio"
-                    placeholder="Tell others about yourself..."
-                    value={formData.bio}
-                    onChange={(e) =>
-                      setFormData((prev) => ({ ...prev, bio: e.target.value }))
-                    }
-                    className="min-h-[100px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="wallet">Wallet Address</Label>
-                  <Input
-                    id="wallet"
-                    value={address}
-                    readOnly
-                    className="bg-gray-50"
-                  />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="wallet">Wallet Address</Label>
+                <Input
+                  id="wallet"
+                  value={address}
+                  readOnly
+                  className="bg-gray-50"
+                />
               </div>
             </div>
+          </div>
 
-            <div className="flex justify-end space-x-4">
-              <Button
-                variant="outline"
-                type="button"
-                onClick={() => navigate({ to: "/" })}
-                disabled={isSubmitting}
-              >
-                Cancel
-              </Button>
-              <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Creating...
-                  </>
-                ) : (
-                  "Create Profile"
-                )}
-              </Button>
-            </div>
-          </form>
-        </div>
+          <div className="flex justify-end space-x-4">
+            <Button
+              variant="outline"
+              type="button"
+              onClick={() => navigate({ to: "/" })}
+              disabled={isSubmitting}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Creating...
+                </>
+              ) : (
+                "Create Profile"
+              )}
+            </Button>
+          </div>
+        </form>
       </CardContent>
     </Card>
   );

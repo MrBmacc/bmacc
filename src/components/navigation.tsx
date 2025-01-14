@@ -1,5 +1,6 @@
 import { useDisconnect } from "wagmi";
 import { Search, User2, UserPlus, LogOut } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 import useStore from "@/stores/app.store";
 
@@ -19,9 +20,40 @@ export function Navigation() {
   const { disconnect } = useDisconnect();
   const { setIsSearchOpen } = useStore();
   const { hasProfile, isConnected, profile } = useProfileStatus();
+  const [isStuck, setIsStuck] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsStuck(!entry.isIntersecting);
+      },
+      { threshold: 1 }
+    );
+
+    // Create a dummy element just above the nav to observe
+    const sentinel = document.createElement("div");
+    navRef.current?.parentElement?.insertBefore(sentinel, navRef.current);
+
+    if (sentinel) {
+      observer.observe(sentinel);
+    }
+
+    return () => {
+      observer.disconnect();
+      sentinel.remove();
+    };
+  }, []);
 
   return (
-    <nav className="sticky top-0 z-50 bg-brand-alt rounded-t-2xl ">
+    <nav
+      ref={navRef}
+      className={`sticky top-0 z-50  ${
+        isStuck
+          ? "is-stuck rounded-t-none bg-brand-alt"
+          : "bg-brand-alt/80 rounded-t-2xl"
+      }`}
+    >
       <div className="absolute inset-x-0 bg-gradient-to-r from-transparent via-white to-transparent w-full bottom-0 h-px"></div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
