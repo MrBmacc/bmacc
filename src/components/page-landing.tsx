@@ -4,6 +4,7 @@ import { Coffee, Search, UserPlus, Send } from "lucide-react";
 
 import useStore from "@/stores/app.store";
 import character from "@/assets/bmacc-character.png";
+import characterInRoom from "@/assets/bmacc-character-in-room.png";
 
 import { useProfileStatus } from "@/hooks/use-profile-status";
 
@@ -109,6 +110,44 @@ export function LandingPage() {
             />
           </div>
         </div>
+      </div>
+
+      {/* Plug Section */}
+      <div className="flex my-80 flex-col md:flex-row justify-between gap-8">
+        <div className="px-4 py-8 relative flex-1">
+          <p className="text-5xl md:text-7xl font-bold text-blue-950 tracking-tighter font-brand">
+            LIKE MY WORK?
+          </p>
+          <p className="text-white font-bold text-2xl md:text-4xl font-brand">
+            BUY ME A CRYPTO COFFEE
+          </p>
+
+          <p className="sm:text-xl text-gray-600 mb-8 max-w-xl my-6">
+            This has been a long time coming, lots of late nights and hard work
+            and I'm appreciative of your support!
+          </p>
+
+          <div className="flex flex-row flex-wrap gap-4">
+            <Button asChild className="w-full md:w-auto">
+              <a href="/tip/mrbmacc">
+                <Coffee size={20} />
+                Buy me a coffee
+              </a>
+            </Button>
+            <Button asChild className="w-full md:w-auto">
+              <a href="https://t.me/BMACC_Official" target="_blank">
+                <Send size={20} />
+                Join the Community
+              </a>
+            </Button>
+          </div>
+        </div>
+
+        <img
+          src={characterInRoom}
+          alt="Buy me a crypto coffee"
+          className="md:w-1/2  h-auto"
+        />
       </div>
     </div>
   );
