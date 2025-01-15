@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import { UserPlus } from "lucide-react";
 
+import { cn } from "@/lib/utils";
+
 import X from "@/components/icons/x";
 import Google from "@/components/icons/google";
 import GitHub from "@/components/icons/github";
@@ -8,8 +10,10 @@ import { ButtonModal } from "@/components/button-modal";
 
 export const ButtonCreateProfile = ({
   children,
+  className,
 }: {
   children?: React.ReactNode;
+  className?: string;
 }) => {
   const iconVariants = {
     animate: {
@@ -32,7 +36,10 @@ export const ButtonCreateProfile = ({
   return (
     <ButtonModal
       screen="Connect"
-      className="relative overflow-hidden flex items-center gap-3 w-44"
+      className={cn(
+        "relative overflow-hidden flex items-center gap-3",
+        className
+      )}
     >
       <motion.div
         animate="animate"

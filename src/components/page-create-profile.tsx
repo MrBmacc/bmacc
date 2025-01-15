@@ -3,6 +3,8 @@ import { useAccount } from "wagmi";
 import { ImagePlus, Loader2 } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 
+import character from "@/assets/bmacc-character.png";
+
 import { useToast } from "@/hooks/use-toast";
 import { useProfileStatus } from "@/hooks/use-profile-status";
 
@@ -12,7 +14,6 @@ import { supabase, supabaseAdmin } from "@/lib/supabase";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { PageLoader } from "@/components/ui/page-loader";
 import { ButtonCreateProfile } from "@/components/button-create-profile";
 import {
@@ -154,16 +155,17 @@ export function CreateProfile() {
     }
   };
 
-  if (!isConnected) {
+  if (isLoading) {
+    return <PageLoader />;
+  }
+
+  if (!isConnected && !isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] p-4">
+        <img src={character} alt="BMACC" className="w-24" />
         <div className="w-full max-w-md space-y-4 text-center">
-          <div className="pt-4 flex justify-center">
-            <ButtonCreateProfile>
-              <h2 className="text-2xl font-bold tracking-tight">
-                Sign in to continue
-              </h2>
-            </ButtonCreateProfile>
+          <div className="flex justify-center">
+            <ButtonCreateProfile>Sign in to continue</ButtonCreateProfile>
           </div>
           <p className="text-gray-500 text-balance">
             You can connect with your wallet or sign in with Google, GitHub or
@@ -172,10 +174,6 @@ export function CreateProfile() {
         </div>
       </div>
     );
-  }
-
-  if (isLoading) {
-    return <PageLoader />;
   }
 
   return (

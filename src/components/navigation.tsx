@@ -1,22 +1,28 @@
-import { useDisconnect } from "wagmi";
-import { Search, User2, UserPlus, LogOut } from "lucide-react";
+import { useDisconnect, useAccount } from "wagmi";
+import { Search, User2, User, Menu, Wallet, Coins } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-
+import { useAppKit } from "@reown/appkit/react";
 import useStore from "@/stores/app.store";
 
 import { truncateAddress } from "@/utils/truncate-address";
 import { useProfileStatus } from "@/hooks/use-profile-status";
 
-import { Button } from "@/components/ui/button";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 import { ButtonModal } from "@/components/button-modal";
 
 export function Navigation() {
+  const { open } = useAppKit();
+  const { connector } = useAccount();
   const { disconnect } = useDisconnect();
   const { setIsSearchOpen } = useStore();
   const { hasProfile, isConnected, profile } = useProfileStatus();
@@ -86,53 +92,103 @@ export function Navigation() {
               </ButtonModal>
             )}
 
-            {isConnected && hasProfile && (
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button asChild variant="ghost" size="icon">
-                      <a href={`/profile/${profile?.slug}`}>
-                        <div className="w-8 h-8 rounded-full overflow-hidden ring-2 ring-white">
+            {isConnected && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost">
+                    <Menu size={20} />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                  <DropdownMenuLabel>
+                    {hasProfile && (
+                      <div className="flex items-center gap-2">
+                        <div className="w-7 h-7 flex-shrink-0 rounded-full overflow-hidden ring-2 ring-stone-200">
                           <img
                             src={profile?.image_url}
                             alt={profile?.username}
                             className="w-full h-full object-cover"
                           />
                         </div>
-                      </a>
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{profile?.username}</p>
-                    <p>{truncateAddress(profile?.wallet_address)}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            )}
-
-            {isConnected && !hasProfile && (
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      asChild
-                      size="icon"
-                      variant="ghost"
-                      className="rounded-full w-8 h-8"
+                        <div className="text-xs flex-col w-fit">
+                          {profile?.username}{" "}
+                          {truncateAddress(profile?.wallet_address)}
+                        </div>
+                      </div>
+                    )}
+                    {!hasProfile && "Account"}
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    {hasProfile && (
+                      <DropdownMenuItem>
+                        <a href={`/profile/${profile?.slug}`}>View profile</a>
+                        <DropdownMenuShortcut>
+                          <User
+                            size={16}
+                            strokeWidth={1.5}
+                            className="text-muted-foreground"
+                          />
+                        </DropdownMenuShortcut>
+                      </DropdownMenuItem>
+                    )}
+                    {!hasProfile && (
+                      <DropdownMenuItem>
+                        <a href="/create">Create profile</a>
+                        <DropdownMenuShortcut>
+                          <User2
+                            size={16}
+                            strokeWidth={1.5}
+                            className="text-muted-foreground"
+                          />
+                        </DropdownMenuShortcut>
+                      </DropdownMenuItem>
+                    )}
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    {connector?.name === "AppKit Auth" && (
+                      <DropdownMenuItem
+                        onClick={() => {
+                          open({ view: "AccountSettings" });
+                        }}
+                      >
+                        Wallet settings
+                        <DropdownMenuShortcut>
+                          <Wallet
+                            size={16}
+                            strokeWidth={1.5}
+                            className="text-muted-foreground"
+                          />
+                        </DropdownMenuShortcut>
+                      </DropdownMenuItem>
+                    )}
+                    <DropdownMenuItem
+                      onClick={() => {
+                        open({ view: "Account" });
+                      }}
                     >
-                      <a href="/create">
-                        <UserPlus size={20} />
-                      </a>
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Create Profile</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+                      Top up your wallet
+                      <DropdownMenuShortcut>
+                        <Coins
+                          size={16}
+                          strokeWidth={1.5}
+                          className="text-muted-foreground"
+                        />
+                      </DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => disconnect()}>
+                    Log out
+                    <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             )}
 
-            {isConnected && (
+            {/* {isConnected && (
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -151,7 +207,7 @@ export function Navigation() {
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
-            )}
+            )} */}
           </div>
         </div>
       </div>

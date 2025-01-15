@@ -45,7 +45,9 @@ export function LandingPage() {
               </Button>
             )}
 
-            {!isLoading && !isConnected && <ButtonCreateProfile />}
+            {!isLoading && !isConnected && (
+              <ButtonCreateProfile className="sm:w-44 w-full" />
+            )}
 
             {!isLoading && isConnected && !hasProfile && (
               <Button className="sm:w-44 w-full" asChild>
