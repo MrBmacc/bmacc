@@ -2,6 +2,7 @@ import { useDisconnect, useAccount } from "wagmi";
 import { Search, User2, User, Menu, Wallet, Coins } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useAppKit } from "@reown/appkit/react";
+import { Link } from "@tanstack/react-router";
 import useStore from "@/stores/app.store";
 
 import { truncateAddress } from "@/utils/truncate-address";
@@ -122,7 +123,13 @@ export function Navigation() {
                   <DropdownMenuGroup>
                     {hasProfile && (
                       <DropdownMenuItem>
-                        <a href={`/profile/${profile?.slug}`}>View profile</a>
+                        <Link
+                          to="/profile/$slug"
+                          params={{ slug: profile?.slug ?? "" }}
+                          preload="intent"
+                        >
+                          View profile
+                        </Link>
                         <DropdownMenuShortcut>
                           <User
                             size={16}
@@ -134,7 +141,9 @@ export function Navigation() {
                     )}
                     {!hasProfile && (
                       <DropdownMenuItem>
-                        <a href="/create">Create profile</a>
+                        <Link to="/create" preload="intent">
+                          Create profile
+                        </Link>
                         <DropdownMenuShortcut>
                           <User2
                             size={16}
