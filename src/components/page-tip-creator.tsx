@@ -29,13 +29,9 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 export function Tip() {
   const { isConnected } = useAccount();
   const [isPending, setIsPending] = useState(false);
-  const {
-    hasNative,
-    hasUsdc,
-    hasBmacc,
-    isLoadingUserBalance,
-    isErrorUserBalance,
-  } = useUserBalance();
+  const [isApproved, setIsApproved] = useState(false);
+  const { hasNative, hasUsdc, hasBmacc, isLoadingUserBalance } =
+    useUserBalance();
 
   const [selectedCurrency, setSelectedCurrency] = useState(currencies[0]);
   const [selectedAmount, setSelectedAmount] = useState(tipAmounts[0].amount);
@@ -91,7 +87,7 @@ export function Tip() {
       selectedCurrency,
     });
 
-  const { triggerApprove } = useApproveSpend({
+  const { triggerApprove, isApproving } = useApproveSpend({
     totalAmount: amountInSelectedToken,
     address: selectedCurrency.address,
     decimals: selectedCurrency.decimals,
@@ -104,7 +100,6 @@ export function Tip() {
     setIsPending(false);
   }, [sendTipError, sendEthTipError]);
 
-  // If not enough eth for gas, set hasEthForGas to false
   if (isLoadingProfile) {
     return <PageLoader />;
   }
@@ -114,8 +109,6 @@ export function Tip() {
   }
 
   const handleApprove = async () => {
-    setIsPending(true);
-
     executeWithConnectionCheck(async () => {
       try {
         const hash = await triggerApprove();
@@ -124,13 +117,12 @@ export function Tip() {
         // Optional: Add additional verification
         if (hash) {
           console.log("Waiting for confirmation...");
-          setIsPending(false);
+          await refetchAllowance();
+          setIsApproved(true);
         }
       } catch (error) {
         console.error("Approval failed:", error);
-        // Optionally reset the approval state
-        // reset();
-        setIsPending(false);
+        setIsApproved(false);
       }
     });
   };
@@ -226,7 +218,7 @@ export function Tip() {
 
       {isConnected && hasNative && (
         <>
-          {needsApproval ? (
+          {!isApproved && needsApproval ? (
             <>
               <div className="text-red-500 text-xs text-center my-2 text-balance leading-5">
                 <p>For security reasons, you need to approve spending first.</p>
@@ -242,7 +234,7 @@ export function Tip() {
                 disabled={isPending}
                 className="w-full"
               >
-                {isPending ? "Approving..." : "Approve"}
+                {isApproving ? "Approving..." : "Approve"}
               </Button>
             </>
           ) : (

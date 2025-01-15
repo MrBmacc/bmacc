@@ -37,8 +37,6 @@ export const CreatorHistory = ({ profile }: { profile: Profile }) => {
     );
   }
 
-  console.log("tips", tips);
-
   const totalUsdTips = Object.entries(tips).reduce((acc, [key, tip]) => {
     return acc + tip.formatted * tokenPrices[key].usdPrice;
   }, 0);

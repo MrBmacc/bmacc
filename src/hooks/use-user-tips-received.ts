@@ -17,8 +17,8 @@ export function useUserTipsReceived(userAddress: Address) {
 
   const {
     data: usdcTips,
-    isPending: isUsdcPending,
     error: usdcError,
+    isLoading: isUsdcLoading,
   } = useReadContract({
     ...cryptoTippingContract,
     functionName: "tipsReceived",
@@ -27,8 +27,8 @@ export function useUserTipsReceived(userAddress: Address) {
 
   const {
     data: ethTips,
-    isPending: isEthPending,
     error: ethError,
+    isLoading: isEthLoading,
   } = useReadContract({
     ...cryptoTippingContract,
     functionName: "tipsReceived",
@@ -37,8 +37,8 @@ export function useUserTipsReceived(userAddress: Address) {
 
   const {
     data: bmaccTips,
-    isPending: isbmaccPending,
     error: bmaccError,
+    isLoading: isbmaccLoading,
   } = useReadContract({
     ...cryptoTippingContract,
     functionName: "tipsReceived",
@@ -67,6 +67,6 @@ export function useUserTipsReceived(userAddress: Address) {
       },
     },
     isHistoryError: usdcError || ethError || bmaccError,
-    isHistoryLoading: isUsdcPending || isEthPending || isbmaccPending,
+    isHistoryLoading: isUsdcLoading || isEthLoading || isbmaccLoading,
   };
 }
