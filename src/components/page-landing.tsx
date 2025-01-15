@@ -1,5 +1,5 @@
 import React from "react";
-
+import { Link } from "@tanstack/react-router";
 import { Coffee, Search, UserPlus, Send } from "lucide-react";
 
 import useStore from "@/stores/app.store";
@@ -52,19 +52,23 @@ export function LandingPage() {
 
             {!isLoading && isConnected && !hasProfile && (
               <Button className="sm:w-44 w-full" asChild>
-                <a href="/create">
+                <Link to="/create" preload="intent">
                   <UserPlus size={20} />
                   Create Profile
-                </a>
+                </Link>
               </Button>
             )}
 
             {!isLoading && isConnected && hasProfile && (
               <Button className="sm:w-44 w-full" asChild>
-                <a href={`/profile/${profile?.slug}`}>
+                <Link
+                  to="/profile/$slug"
+                  params={{ slug: profile?.slug ?? "" }}
+                  preload="intent"
+                >
                   <UserPlus size={20} />
                   View Profile
-                </a>
+                </Link>
               </Button>
             )}
 
@@ -129,10 +133,10 @@ export function LandingPage() {
 
           <div className="flex flex-row flex-wrap gap-4">
             <Button asChild className="w-full md:w-auto">
-              <a href="/tip/mrbmacc">
+              <Link to="/tip/mrbmacc" preload="intent">
                 <Coffee size={20} />
                 Buy me a coffee
-              </a>
+              </Link>
             </Button>
             <Button asChild className="w-full md:w-auto">
               <a href="https://t.me/BMACC_Official" target="_blank">

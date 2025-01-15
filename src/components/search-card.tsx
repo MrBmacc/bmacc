@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Link } from "@tanstack/react-router";
 import { useNavigate } from "@tanstack/react-router";
 
 import { toUrlFriendly } from "@/lib/utils";
@@ -29,15 +30,17 @@ export function SearchCard({ creator, onClose }: CreatorCardProps) {
         alt={creator.username}
         className="w-12 h-12 rounded-full object-cover ring-2 ring-white"
       />
-      <a
-        href={`/profile/${toUrlFriendly(creator.username)}`}
+      <Link
+        to="/profile/$slug"
+        params={{ slug: toUrlFriendly(creator.username) }}
+        preload="intent"
         className="flex-1 min-w-0 text-start"
       >
         <h3 className="font-medium text-gray-900 truncate">
           @{creator.username}
         </h3>
         <p className="text-sm text-gray-500 truncate">{creator.bio}</p>
-      </a>
+      </Link>
       <div className="flex items-center space-x-2 flex-col">
         <Button onClick={handleTip}>Send Tip</Button>
       </div>

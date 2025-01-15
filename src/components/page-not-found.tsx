@@ -21,6 +21,7 @@ export function PageNotFound() {
             <div className="pt-4">
               <Link
                 to="/"
+                preload="intent"
                 className="text-teal-600 hover:text-teal-700 font-medium"
               >
                 Go back home

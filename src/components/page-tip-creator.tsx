@@ -249,6 +249,7 @@ export function Tip() {
         className="text-sm text-muted-foreground text-center block my-3"
         to="/profile/$slug"
         params={{ slug: profile.slug }}
+        preload="intent"
       >
         View {profile.username}'s Profile
       </Link>

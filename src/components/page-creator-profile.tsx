@@ -214,7 +214,7 @@ export function ProfilePage() {
 
       {!isOwner && (
         <Button asChild className="w-full py-6 text-lg">
-          <Link to="/tip/$slug" params={{ slug }}>
+          <Link to="/tip/$slug" params={{ slug }} preload="intent">
             <span className="pl-6">Buy me a coffee</span>
           </Link>
         </Button>
