@@ -1,8 +1,8 @@
+import { zeroAddress } from "viem";
 import { useReadContract } from "wagmi";
 
 import { cryptoTippingAbi } from "@/config/abi/cryptoTippingAbi";
 import { currencies, cryptoTippingAddress } from "@/config/constants";
-
 import type { Address } from "viem";
 
 export function useUserTipsReceived(userAddress: Address) {
@@ -32,7 +32,7 @@ export function useUserTipsReceived(userAddress: Address) {
   } = useReadContract({
     ...cryptoTippingContract,
     functionName: "tipsReceived",
-    args: [userAddress, ethCurrency?.address as Address],
+    args: [userAddress, zeroAddress],
   });
 
   const {
