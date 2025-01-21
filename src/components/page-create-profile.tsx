@@ -33,6 +33,7 @@ export function CreateProfile() {
     username: "",
     bio: "",
     imageUrl: "",
+    referrer: "",
   });
   const [isUploading, setIsUploading] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -130,6 +131,7 @@ export function CreateProfile() {
         image_url: formData.imageUrl,
         slug: toUrlFriendly(formData.username),
         wallet_address: address.toLowerCase(),
+        referrer: formData.referrer,
       });
 
       if (error) throw error;
@@ -140,8 +142,8 @@ export function CreateProfile() {
       });
 
       navigate({
-        to: "/profile/$username",
-        params: { username: formData.username },
+        to: "/profile/$slug",
+        params: { slug: formData.username },
       });
     } catch (error) {
       console.error("Error creating profile:", error);
@@ -245,11 +247,11 @@ export function CreateProfile() {
                   }
                   required
                 />
-                <p className="text-sm text-gray-500">
+                <p className="text-xs text-gray-500">
                   This will be your username and will be used to identify you on
                   the platform.
                 </p>
-                <p className="text-sm text-gray-500">
+                <p className="text-xs text-gray-500">
                   Do not include the @ symbol.
                 </p>
               </div>
@@ -266,6 +268,25 @@ export function CreateProfile() {
                   className="min-h-[100px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                   required
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="referrer">Referrer</Label>
+
+                <Input
+                  id="referrer"
+                  value={formData.referrer}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      referrer: e.target.value,
+                    }))
+                  }
+                />
+                <p className="text-xs text-gray-500">
+                  If someone referred you to the platform, enter their username
+                  here.
+                </p>
               </div>
 
               <div className="space-y-2">
