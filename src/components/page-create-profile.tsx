@@ -23,6 +23,7 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
+import { TipTap } from "./ui/tip-tap-editor";
 
 export function CreateProfile() {
   const navigate = useNavigate();
@@ -223,7 +224,7 @@ export function CreateProfile() {
                       Uploading
                     </>
                   ) : (
-                    "Change"
+                    "Add"
                   )}
                 </Button>
               </div>
@@ -258,15 +259,15 @@ export function CreateProfile() {
 
               <div className="space-y-2">
                 <Label htmlFor="bio">Bio</Label>
-                <textarea
+
+                <TipTap
                   id="bio"
-                  placeholder="Tell others about yourself..."
-                  value={formData.bio}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, bio: e.target.value }))
-                  }
-                  className="min-h-[100px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                   required
+                  placeholder="Tell others about yourself..."
+                  content={formData.bio}
+                  onChange={(newContent) =>
+                    setFormData((prev) => ({ ...prev, bio: newContent }))
+                  }
                 />
               </div>
 

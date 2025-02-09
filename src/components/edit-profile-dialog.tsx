@@ -1,10 +1,12 @@
 import React from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
-import { Button } from "./ui/button";
-import { Label } from "./ui/label";
 import { ImagePlus, Loader2 } from "lucide-react";
 import { supabase, supabaseAdmin, type Profile } from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
+
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { TipTap } from "@/components/ui/tip-tap-editor";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface EditProfileDialogProps {
   isOpen: boolean;
@@ -148,14 +150,11 @@ export function EditProfileDialog({
 
             <div className="space-y-2">
               <Label htmlFor="bio">Bio</Label>
-              <textarea
-                id="bio"
-                value={formData.bio}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, bio: e.target.value }))
+              <TipTap
+                content={formData.bio}
+                onChange={(newContent) =>
+                  setFormData((prev) => ({ ...prev, bio: newContent }))
                 }
-                className="min-h-[100px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-                required
               />
             </div>
           </div>

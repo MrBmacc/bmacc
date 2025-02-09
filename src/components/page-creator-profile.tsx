@@ -40,10 +40,10 @@ import { ButtonCopyClipboard } from "@/components/button-copy-clipboard";
 import { truncateAddress } from "@/utils/truncate-address";
 
 export function ProfilePage() {
+  const { toast } = useToast();
   const { slug } = useParams({ from: "/profile/$slug" });
   const { address, isConnected } = useAccount();
   const navigate = useNavigate();
-  const { toast } = useToast();
   const [profile, setProfile] = useState<ProfileType | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -168,7 +168,10 @@ export function ProfilePage() {
             : `${profile.username}'s profile`}
         </h1>
 
-        <p className="text-gray-600 text-balance text-center">{profile.bio}</p>
+        <div 
+          className="text-gray-600 text-balance text-center prose prose-sm max-w-none"
+          dangerouslySetInnerHTML={{ __html: profile.bio }}
+        />
       </div>
 
       <div className="flex flex-col items-center justify-center mb-6">
