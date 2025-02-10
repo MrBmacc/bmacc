@@ -38,6 +38,7 @@ export function DeleteProfileDialog({ onConfirm }: DeleteProfileDialogProps) {
       <DialogTrigger asChild ref={closeRef}>
         <Button variant="outline">
           <Trash2 className="w-4 h-4" />
+          <span className="sr-only">Delete Profile</span>
         </Button>
       </DialogTrigger>
       <DialogContent>

@@ -116,7 +116,7 @@ export function ProfilePage() {
     address?.toLowerCase() === profile.wallet_address.toLowerCase();
 
   return (
-    <Card className="max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-xl relative animate-in slide-in-from-top ease-in-out pb-20 min-h-[80svh] md:min-h-0">
+    <Card className="max-w-xl mx-auto md:p-6 p-2 bg-white rounded-2xl shadow-xl relative animate-in slide-in-from-top ease-in-out pb-20 min-h-[80svh] md:min-h-0">
       <CreatorHeader profile={profile} />
       {isOwner && (
         <div className="flex gap-2 justify-end">
