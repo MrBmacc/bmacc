@@ -89,7 +89,7 @@ export function LandingPage() {
         <img
           src={character}
           alt="Buy me a crypto coffee"
-          className="w-80 h-auto"
+          className="w-48 md:w-80 h-auto mx-auto"
         />
       </div>
 
