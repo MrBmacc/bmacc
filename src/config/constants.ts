@@ -23,12 +23,7 @@ export type Currency = {
 };
 
 export const currencies: Currency[] = [
-  {
-    symbol: "BMACC",
-    address: bmaccAddress,
-    decimals: 18,
-    image: "/images/bmacc-logo.png",
-  },
+  
   {
     symbol: "USDC",
     address: usdcAddress,
@@ -40,5 +35,11 @@ export const currencies: Currency[] = [
     address: "0x4200000000000000000000000000000000000006", // weth on base
     decimals: 18,
     image: "/images/eth.png",
+  },
+  {
+    symbol: "BMACC",
+    address: bmaccAddress,
+    decimals: 18,
+    image: "/images/bmacc-logo.png",
   },
 ];
