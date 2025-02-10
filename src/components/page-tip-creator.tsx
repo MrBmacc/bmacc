@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 
 import { parseUnits } from "viem";
 import { useAccount } from "wagmi";
+import { base } from "viem/chains";
 import { Link, useLoaderData } from "@tanstack/react-router";
 
 import { tipAmounts, currencies } from "@/config/constants";
@@ -41,7 +42,7 @@ export function Tip() {
   const { fireAllMoney } = useConfetti();
   const { tokenPrices } = useTokenPrices();
   const { executeWithConnectionCheck } = useConnectionCheck({
-    desiredChainId: 8453,
+    desiredChainId: base.id,
   });
 
   // Compute the amount in USD

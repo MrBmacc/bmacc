@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { erc20Abi, parseUnits } from "viem";
 import {
+  useAccount,
   useWriteContract,
   useWaitForTransactionReceipt,
-  useAccount,
 } from "wagmi";
 
 import { useToast } from "@/hooks/use-toast";
@@ -68,14 +68,6 @@ export const useApproveSpend = ({
       const increasedAmount = Math.ceil(Number(totalAmount) * 1.05);
       const amountInWei = parseUnits(increasedAmount.toString(), decimals);
 
-      // console.log("Attempting approval:", {
-      //   attempt: retryCount + 1,
-      //   wallet: connector?.name,
-      //   tokenAddress: address,
-      //   spender: cryptoTippingAddress,
-      //   amount: amountInWei.toString(),
-      // });
-
       const txHash = await writeContractAsync({
         ...tokenContract,
         functionName: "approve",
@@ -86,8 +78,6 @@ export const useApproveSpend = ({
           gasPrice: undefined, // Let Coinbase handle it
         }),
       });
-
-      // console.log("Transaction submitted:", txHash);
 
       // For Coinbase Wallet, add a small delay before returning
       if (isCoinbaseWallet) {
