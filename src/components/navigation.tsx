@@ -5,6 +5,8 @@ import { useAppKit } from "@reown/appkit/react";
 import { Link } from "@tanstack/react-router";
 import useStore from "@/stores/app.store";
 
+import userImageDefault from "@/assets/default-image-woman.webp";
+
 import { truncateAddress } from "@/utils/truncate-address";
 import { useProfileStatus } from "@/hooks/use-profile-status";
 
@@ -106,7 +108,7 @@ export function Navigation() {
                       <div className="flex items-center gap-2">
                         <div className="w-7 h-7 flex-shrink-0 rounded-full overflow-hidden ring-2 ring-stone-200">
                           <img
-                            src={profile?.image_url}
+                            src={profile?.image_url || userImageDefault}
                             alt={profile?.username}
                             className="w-full h-full object-cover"
                           />
