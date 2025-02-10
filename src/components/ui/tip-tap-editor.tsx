@@ -177,7 +177,7 @@ export const TipTap = ({
           className="focus:outline-none [&_p]:m-0 [&_.ProseMirror]:focus:outline-none [&_.ProseMirror]:focus:border-none"
         />
         {isEmpty && placeholder && (
-          <div className="absolute top-[42px] left-3 text-muted-foreground pointer-events-none">
+          <div className="absolute top-[42px] left-3 py-2 text-muted-foreground pointer-events-none">
             {placeholder}
           </div>
         )}

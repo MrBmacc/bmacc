@@ -1,5 +1,5 @@
 import { useDisconnect, useAccount } from "wagmi";
-import { Search, User2, User, Menu, Wallet, Coins } from "lucide-react";
+import { Search, User2, User, Menu, Wallet, Coins, LogOut } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useAppKit } from "@reown/appkit/react";
 import { Link } from "@tanstack/react-router";
@@ -191,32 +191,17 @@ export function Navigation() {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => disconnect()}>
                     Log out
-                    <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                    <DropdownMenuShortcut>
+                      <LogOut
+                        size={16}
+                        strokeWidth={1.5}
+                        className="text-muted-foreground"
+                      />
+                    </DropdownMenuShortcut>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             )}
-
-            {/* {isConnected && (
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      className="rounded-full w-8 h-8"
-                      onClick={() => disconnect()}
-                    >
-                      <LogOut size={20} />
-                      <span className="sr-only">Disconnect</span>
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Disconnect wallet</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            )} */}
           </div>
         </div>
       </div>
