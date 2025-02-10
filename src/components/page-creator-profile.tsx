@@ -121,7 +121,6 @@ export function ProfilePage() {
       {isOwner && (
         <div className="flex gap-2 justify-end">
           <EditProfileDialog profile={profile} onUpdate={handleProfileUpdate} />
-
           <DeleteProfileDialog onConfirm={handleProfileDelete} />
         </div>
       )}
@@ -134,10 +133,11 @@ export function ProfilePage() {
         </h1>
 
         <div
-          className="text-gray-600 text-balance text-center prose prose-sm max-w-none"
+          className="text-gray-600 text-balance text-center prose prose-sm max-w-none prose-p:mb-4"
           dangerouslySetInnerHTML={{ __html: profile.bio }}
         />
       </div>
+
 
       <div className="flex flex-col items-center justify-center mb-6">
         <QRCodeSVG value={profileUrl} />

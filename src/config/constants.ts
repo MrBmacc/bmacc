@@ -23,7 +23,6 @@ export type Currency = {
 };
 
 export const currencies: Currency[] = [
-  
   {
     symbol: "USDC",
     address: usdcAddress,
