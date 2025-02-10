@@ -1,23 +1,26 @@
 import React from "react";
-import { ImagePlus, Loader2 } from "lucide-react";
+import { ImagePlus, Loader2, Pencil } from "lucide-react";
 import { supabase, supabaseAdmin, type Profile } from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
 
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { TipTap } from "@/components/ui/tip-tap-editor";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog";
 
 interface EditProfileDialogProps {
-  isOpen: boolean;
-  onClose: () => void;
   profile: Profile;
   onUpdate: (profile: Profile) => void;
 }
 
 export function EditProfileDialog({
-  isOpen,
-  onClose,
   profile,
   onUpdate,
 }: EditProfileDialogProps) {
@@ -28,6 +31,8 @@ export function EditProfileDialog({
   });
   const [isUploading, setIsUploading] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+  const closeRef = React.useRef<HTMLButtonElement>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
@@ -86,7 +91,7 @@ export function EditProfileDialog({
       if (error) throw error;
 
       onUpdate(data);
-      onClose();
+      closeRef.current?.click();
     } catch (error) {
       console.error("Error updating profile:", error);
       toast({
@@ -100,7 +105,12 @@ export function EditProfileDialog({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog>
+      <DialogTrigger asChild ref={closeRef}>
+        <Button variant="outline">
+          <Pencil className="w-4 h-4" />
+        </Button>
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Edit Profile</DialogTitle>
@@ -160,14 +170,11 @@ export function EditProfileDialog({
           </div>
 
           <div className="flex justify-end space-x-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onClose}
-              disabled={isSubmitting}
-            >
-              Cancel
-            </Button>
+            <DialogClose asChild>
+              <Button type="button" variant="outline" disabled={isSubmitting}>
+                Cancel
+              </Button>
+            </DialogClose>
             <Button type="submit" disabled={isSubmitting}>
               {isSubmitting ? (
                 <>

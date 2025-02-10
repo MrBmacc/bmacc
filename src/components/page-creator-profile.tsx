@@ -3,10 +3,7 @@ import { QRCodeSVG } from "qrcode.react";
 import {
   Copy,
   Coffee,
-  Pencil,
-  Trash2,
   Wallet2,
-  MoreHorizontal,
 } from "lucide-react";
 import { useAccount } from "wagmi";
 import { useParams, useNavigate } from "@tanstack/react-router";
@@ -16,16 +13,6 @@ import { toUrlFriendly } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "@tanstack/react-router";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PageLoader } from "@/components/ui/page-loader";
@@ -47,8 +34,6 @@ export function ProfilePage() {
   const [profile, setProfile] = useState<ProfileType | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const [isEditOpen, setIsEditOpen] = useState(false);
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const profileUrl = `${window.location.origin}/tip/${toUrlFriendly(slug)}`;
 
   useEffect(() => {
@@ -134,31 +119,11 @@ export function ProfilePage() {
     <Card className="max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-xl relative animate-in slide-in-from-top ease-in-out pb-20 min-h-[80svh] md:min-h-0">
       <CreatorHeader profile={profile} />
       {isOwner && (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline">
-              <MoreHorizontal size={18} />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem onClick={() => setIsEditOpen(true)}>
-                Edit Profile
-                <DropdownMenuShortcut>
-                  <Pencil size={12} />
-                </DropdownMenuShortcut>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setIsDeleteOpen(true)}>
-                Delete Profile
-                <DropdownMenuShortcut>
-                  <Trash2 size={12} />
-                </DropdownMenuShortcut>
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex gap-2 justify-end">
+          <EditProfileDialog profile={profile} onUpdate={handleProfileUpdate} />
+
+          <DeleteProfileDialog onConfirm={handleProfileDelete} />
+        </div>
       )}
 
       <div className="flex flex-col gap-2 justify-center items-center mt-24 mb-10">
@@ -168,7 +133,7 @@ export function ProfilePage() {
             : `${profile.username}'s profile`}
         </h1>
 
-        <div 
+        <div
           className="text-gray-600 text-balance text-center prose prose-sm max-w-none"
           dangerouslySetInnerHTML={{ __html: profile.bio }}
         />
@@ -222,19 +187,6 @@ export function ProfilePage() {
           </Link>
         </Button>
       )}
-
-      <EditProfileDialog
-        isOpen={isEditOpen}
-        onClose={() => setIsEditOpen(false)}
-        profile={profile}
-        onUpdate={handleProfileUpdate}
-      />
-
-      <DeleteProfileDialog
-        isOpen={isDeleteOpen}
-        onClose={() => setIsDeleteOpen(false)}
-        onConfirm={handleProfileDelete}
-      />
     </Card>
   );
 }

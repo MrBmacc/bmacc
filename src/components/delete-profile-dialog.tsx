@@ -5,35 +5,37 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-} from "./ui/dialog";
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog";
 import { Button } from "./ui/button";
-import { Loader2 } from "lucide-react";
+import { Loader2, Trash2 } from "lucide-react";
 
 interface DeleteProfileDialogProps {
-  isOpen: boolean;
-  onClose: () => void;
   onConfirm: () => Promise<void>;
 }
 
-export function DeleteProfileDialog({
-  isOpen,
-  onClose,
-  onConfirm,
-}: DeleteProfileDialogProps) {
+export function DeleteProfileDialog({ onConfirm }: DeleteProfileDialogProps) {
   const [isDeleting, setIsDeleting] = React.useState(false);
+  const closeRef = React.useRef<HTMLButtonElement>(null);
 
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
       await onConfirm();
-      onClose();
+      closeRef.current?.click();
     } finally {
       setIsDeleting(false);
     }
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog>
+      <DialogTrigger asChild ref={closeRef}>
+        <Button variant="outline">
+          <Trash2 className="w-4 h-4" />
+        </Button>
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Delete Profile</DialogTitle>
@@ -44,14 +46,11 @@ export function DeleteProfileDialog({
         </DialogHeader>
 
         <div className="flex justify-end space-x-4">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onClose}
-            disabled={isDeleting}
-          >
-            Cancel
-          </Button>
+          <DialogClose asChild>
+            <Button type="button" variant="outline" disabled={isDeleting}>
+              Cancel
+            </Button>
+          </DialogClose>
           <Button
             type="button"
             variant="destructive"
