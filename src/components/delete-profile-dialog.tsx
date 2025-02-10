@@ -1,4 +1,7 @@
 import React from "react";
+import { useDisconnect } from "wagmi";
+import { Loader2, Trash2 } from "lucide-react";
+
 import {
   Dialog,
   DialogContent,
@@ -8,22 +11,23 @@ import {
   DialogTrigger,
   DialogClose,
 } from "@/components/ui/dialog";
-import { Button } from "./ui/button";
-import { Loader2, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface DeleteProfileDialogProps {
   onConfirm: () => Promise<void>;
 }
 
 export function DeleteProfileDialog({ onConfirm }: DeleteProfileDialogProps) {
+  const { disconnect } = useDisconnect();
   const [isDeleting, setIsDeleting] = React.useState(false);
   const closeRef = React.useRef<HTMLButtonElement>(null);
-
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
       await onConfirm();
       closeRef.current?.click();
+      // Logout
+      disconnect();
     } finally {
       setIsDeleting(false);
     }
