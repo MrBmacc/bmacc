@@ -12,13 +12,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { ButtonCreateProfile } from "@/components/button-create-profile";
 
+import { SectionAbout } from "@/components/section-about";
+
 export function LandingPage() {
   const { setIsSearchOpen } = useStore();
   const { isConnected, isLoading, hasProfile, profile } = useProfileStatus();
   return (
     <div className="relative flex flex-col">
+      {/* Hero Section */}
       <div className="flex md:mt-16 mt-0 flex-col md:flex-row-reverse justify-between gap-8">
-        {/* Hero Section */}
         <div className=" px-4 py-8 relative flex-1">
           <h1 className="text-7xl md:text-9xl font-bold text-blue-950 tracking-tighter font-brand">
             BMACC
@@ -28,8 +30,8 @@ export function LandingPage() {
           </h2>
 
           <p className="sm:text-xl text-gray-600 mb-8 max-w-xl my-6">
-            Go beyond likes and hearts, show real appreciation to your favorite
-            creators with cryptocurrency tips.{" "}
+            Go beyond likes and hearts, get real appreciation from your
+            supporters with cryptocurrency tips. Powered by Base.{" "}
             <a
               href="https://www.base.org/"
               target="_blank"
@@ -116,6 +118,9 @@ export function LandingPage() {
         </div>
       </div>
 
+      {/* About Section */}
+      <SectionAbout />
+
       {/* Plug Section */}
       <div className="flex my-80 flex-col md:flex-row justify-between gap-8">
         <div className="px-4 py-8 relative flex-1">
@@ -153,18 +158,86 @@ export function LandingPage() {
           className="md:w-1/2  h-auto"
         />
       </div>
+
+      {/* Contact Section */}
+      <div className="pb-8 px-4 relative">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-5xl md:text-7xl font-bold text-blue-950 tracking-tighter font-brand">
+            STAY CONNECTED
+          </h2>
+          <p className="text-white font-bold text-2xl md:text-4xl font-brand">
+            GET SUPPORT
+          </p>
+
+          <div className="grid md:grid-cols-2 gap-12">
+            <div className="mt-6 space-y-6 text-gray-600">
+              <p>
+                Looking for tutorials, FAQs, platform updates or the latest
+                news? Visit{" "}
+                <a
+                  href="https://www.bmacc.io"
+                  target="_blank"
+                  className="text-blue-950 font-semibold hover:underline"
+                >
+                  WWW.BMACC.IO
+                </a>{" "}
+                for everything you need to get started and stay informed.
+              </p>
+
+              <p>Need help or have questions? Our team is here for you!</p>
+
+              <p>
+                Join our community, stay updated and be part of the movement
+                that's making crypto tipping simple and rewarding!
+              </p>
+            </div>
+
+            <Card className="relative bg-white border-blue-950 border-2">
+            <CardContent className="space-y-4 mt-6">
+              <p>
+                <b>Email:</b>{" "}
+                <a
+                  href="mailto:support@bmacc.io"
+                  className="text-blue-950 hover:underline"
+                >
+                  support@bmacc.io
+                </a>
+              </p>
+              <p>
+                <b>Telegram Community:</b>{" "}
+                <a
+                  href="https://t.me/BMACC_Official"
+                  target="_blank"
+                  className="text-blue-950 hover:underline"
+                >
+                  t.me/BMACC_Official
+                </a>
+              </p>
+              <p>
+                <b>Twitter/X:</b>{" "}
+                <a
+                  href="https://x.com/BMACC_Official"
+                  target="_blank"
+                  className="text-blue-950 hover:underline"
+                >
+                  x.com/BMACC_Official
+                </a>
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
 
 function FeatureCard({
   title,
-
   description,
   icon,
 }: {
   title: string;
-
   description: string;
   icon: React.ReactNode;
 }) {
