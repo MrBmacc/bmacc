@@ -6,17 +6,14 @@ import characterInRoom from "@/assets/bmacc-character-in-room.png";
 
 const testimonials = [
   {
-    name: "John Doe",
     testimonial:
       "Quick and smooth. Loved the minimal clicks needed to complete a tip.",
   },
   {
-    name: "Jane Smith",
     testimonial:
       "Super intuitive! Even if you're new to crypto, everything is user-friendly and straightforward.",
   },
   {
-    name: "John Doe",
     testimonial:
       "Even if you're new to crypto, everything is user-friendly and straightforward.",
   },
