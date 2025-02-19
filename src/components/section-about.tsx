@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { MessageCircleQuestion } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import characterInRoom from "@/assets/bmacc-character-in-room.png";
+import appInPhone from "@/assets/phone.png";
 
 const testimonials = [
   {
@@ -37,7 +37,7 @@ export const SectionAbout = () => {
   }, []);
 
   return (
-    <div className="flex my-80 flex-col gap-8">
+    <div className="flex my-60 flex-col gap-8">
       <div className="px-4 my-36 relative overflow-hidden max-w-4xl mx-auto">
         <div
           className={`transition-opacity duration-500 ${
@@ -89,7 +89,7 @@ export const SectionAbout = () => {
         </div>
 
         <img
-          src={characterInRoom}
+          src={appInPhone}
           alt="Buy me a crypto coffee"
           className="md:w-1/2  h-auto"
         />
