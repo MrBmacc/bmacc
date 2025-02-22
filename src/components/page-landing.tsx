@@ -4,7 +4,6 @@ import { Coffee, Search, UserPlus, Send } from "lucide-react";
 
 import useStore from "@/stores/app.store";
 import character from "@/assets/bmacc-character.png";
-import characterInRoom from "@/assets/bmacc-character-in-room.png";
 
 import { useProfileStatus } from "@/hooks/use-profile-status";
 
@@ -13,6 +12,7 @@ import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { ButtonCreateProfile } from "@/components/button-create-profile";
 
 import { SectionAbout } from "@/components/section-about";
+import { SectionTestimonials } from "@/components/section-testimonials";
 
 export function LandingPage() {
   const { setIsSearchOpen } = useStore();
@@ -122,45 +122,10 @@ export function LandingPage() {
       <SectionAbout />
 
       {/* Plug Section */}
-      <div className="flex my-80 flex-col md:flex-row justify-between gap-8">
-        <div className="px-4 py-8 relative flex-1">
-          <p className="text-5xl md:text-7xl font-bold text-blue-950 tracking-tighter font-brand">
-            LIKE MY WORK?
-          </p>
-          <p className="text-white font-bold text-2xl md:text-4xl font-brand">
-            BUY ME A CRYPTO COFFEE
-          </p>
-
-          <p className="sm:text-xl text-gray-600 mb-8 max-w-xl my-6">
-            This has been a long time coming, lots of late nights and hard work
-            and I'm appreciative of your support!
-          </p>
-
-          <div className="flex flex-row flex-wrap gap-4">
-            <Button asChild className="w-full md:w-auto">
-              <Link to="/tip/mrbmacc" preload="intent">
-                <Coffee size={20} />
-                Buy me a coffee
-              </Link>
-            </Button>
-            <Button asChild className="w-full md:w-auto">
-              <a href="https://t.me/BMACC_Official" target="_blank">
-                <Send size={20} />
-                Join the Community
-              </a>
-            </Button>
-          </div>
-        </div>
-
-        <img
-          src={characterInRoom}
-          alt="Buy me a crypto coffee"
-          className="md:w-1/2  h-auto"
-        />
-      </div>
+      <SectionTestimonials />
 
       {/* Contact Section */}
-      <div className="pb-8 px-4 relative">
+      <div className="pb-16 px-4 relative">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-5xl md:text-7xl font-bold text-blue-950 tracking-tighter font-brand">
             STAY CONNECTED
@@ -179,12 +144,12 @@ export function LandingPage() {
                   target="_blank"
                   className="text-blue-950 font-semibold hover:underline"
                 >
-                  WWW.BMACC.IO
+                  our website
                 </a>{" "}
                 for everything you need to get started and stay informed.
               </p>
 
-              <p>Need help or have questions? Our team is here for you!</p>
+              <p>Need help or have questions? Our team is <a href="https://t.me/BMACC_Official" target="_blank" className="text-blue-950 font-semibold hover:underline">here</a> for you!</p>
 
               <p>
                 Join our community, stay updated and be part of the movement
@@ -193,36 +158,47 @@ export function LandingPage() {
             </div>
 
             <Card className="relative bg-white border-blue-950 border-2">
-            <CardContent className="space-y-4 mt-6">
+              <CardContent className="space-y-4 mt-6">
               <p>
-                <b>Email:</b>{" "}
-                <a
-                  href="mailto:support@bmacc.io"
-                  className="text-blue-950 hover:underline"
-                >
-                  support@bmacc.io
-                </a>
-              </p>
-              <p>
-                <b>Telegram Community:</b>{" "}
-                <a
-                  href="https://t.me/BMACC_Official"
-                  target="_blank"
-                  className="text-blue-950 hover:underline"
-                >
-                  t.me/BMACC_Official
-                </a>
-              </p>
-              <p>
-                <b>Twitter/X:</b>{" "}
-                <a
-                  href="https://x.com/BMACC_Official"
-                  target="_blank"
-                  className="text-blue-950 hover:underline"
-                >
-                  x.com/BMACC_Official
-                </a>
+                  <b>Website</b>{" "}
+                  <a
+                    href="https://www.bmacc.io"
+                    target="_blank"
+                    className="text-blue-950 hover:underline"
+                  >
+                    www.bmacc.io
+                  </a>
                 </p>
+                <p>
+                  <b>Email:</b>{" "}
+                  <a
+                    href="mailto:support@bmacc.io"
+                    className="text-blue-950 hover:underline"
+                  >
+                    support@bmacc.io
+                  </a>
+                </p>
+                <p>
+                  <b>Telegram Community:</b>{" "}
+                  <a
+                    href="https://t.me/BMACC_Official"
+                    target="_blank"
+                    className="text-blue-950 hover:underline"
+                  >
+                    t.me/BMACC_Official
+                  </a>
+                </p>
+                <p>
+                  <b>Twitter/X:</b>{" "}
+                  <a
+                    href="https://x.com/BMACC_Official"
+                    target="_blank"
+                    className="text-blue-950 hover:underline"
+                  >
+                    x.com/BMACC_Official
+                  </a>
+                </p>
+              
               </CardContent>
             </Card>
           </div>
