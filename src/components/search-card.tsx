@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
 import { useNavigate } from "@tanstack/react-router";
 
-import userImageDefault from "@/assets/default-image-woman.webp";
+import userImageDefault from "@/assets/default.jpg";
 import type { Profile } from "@/lib/supabase";
 import { toUrlFriendly } from "@/lib/utils";
 interface CreatorCardProps {

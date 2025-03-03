@@ -1,5 +1,5 @@
 import type { Profile } from "@/lib/supabase";
-import userImageDefault from "@/assets/default-image-woman.webp";
+import userImageDefault from "@/assets/default.jpg";
 
 export const CreatorHeader = ({ profile }: { profile: Profile }) => {
   return (

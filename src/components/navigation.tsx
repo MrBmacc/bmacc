@@ -5,7 +5,7 @@ import { useAppKit } from "@reown/appkit/react";
 import { Link } from "@tanstack/react-router";
 import useStore from "@/stores/app.store";
 
-import userImageDefault from "@/assets/default-image-woman.webp";
+import userImageDefault from "@/assets/default.jpg";
 
 import { truncateAddress } from "@/utils/truncate-address";
 import { useProfileStatus } from "@/hooks/use-profile-status";
