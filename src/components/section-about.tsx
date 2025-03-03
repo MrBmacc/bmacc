@@ -5,7 +5,7 @@ import appInPhone from "@/assets/phone.png";
 
 export const SectionAbout = () => {
   return (
-    <div className="flex my-60 flex-col md:flex-row justify-between gap-8">
+    <div className="flex md:my-60 my-8 flex-col md:flex-row justify-between gap-8">
       <div className="px-4 py-8 relative flex-1">
         <p className="text-5xl md:text-7xl font-bold text-blue-950 tracking-tighter font-brand">
           WE MAKE TIPPING EFFORTLESS

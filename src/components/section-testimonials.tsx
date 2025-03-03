@@ -7,8 +7,7 @@ const testimonials = [
       "Quick and smooth. Loved the minimal clicks needed to complete a tip.",
   },
   {
-    testimonial:
-      "Super intuitive!",
+    testimonial: "Super intuitive!",
   },
   {
     testimonial:
@@ -33,7 +32,7 @@ export const SectionTestimonials = () => {
     return () => clearInterval(timer);
   }, []);
   return (
-    <div className="flex mb-60 flex-col md:flex-row justify-between gap-8">
+    <div className="flex md:mb-60 mb-24 flex-col md:flex-row justify-between gap-8">
       <div className="px-4 md:my-36 my-20 relative overflow-hidden max-w-4xl mx-auto min-h-36">
         <div
           className={`transition-opacity duration-500 ${
@@ -47,13 +46,12 @@ export const SectionTestimonials = () => {
           </div>
         </div>
       </div>
-    
 
       <img
         src={characterInRoom}
         alt="Buy me a crypto coffee"
         className="md:w-1/2  h-auto"
       />
-  </div>
+    </div>
   );
 };

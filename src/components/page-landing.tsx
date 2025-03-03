@@ -125,7 +125,7 @@ export function LandingPage() {
       <SectionTestimonials />
 
       {/* Contact Section */}
-      <div className="pb-16 px-4 relative">
+      <div className="md:pb-16 pb-8 px-4 relative">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-5xl md:text-7xl font-bold text-blue-950 tracking-tighter font-brand">
             STAY CONNECTED
