@@ -11,7 +11,7 @@ export const SectionAbout = () => {
           WE MAKE TIPPING EFFORTLESS
         </p>
         <p className="text-white font-bold text-2xl md:text-4xl font-brand">
-          WETHER YOU'RE A CREATOR, FREELANCER OR SERVICE WORKER.
+          WHETHER YOU'RE A CREATOR, FREELANCER OR SERVICE WORKER.
         </p>
 
         <p className="sm:text-lg text-gray-600 mb-8 max-w-xl my-6">

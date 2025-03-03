@@ -31,7 +31,7 @@ export function LandingPage() {
 
           <p className="sm:text-xl text-gray-600 mb-8 max-w-xl my-6">
             Go beyond likes and hearts, get real appreciation from your
-            supporters with cryptocurrency tips. Powered by Base.{" "}
+            supporters with cryptocurrency tips.
             <a
               href="https://www.base.org/"
               target="_blank"
