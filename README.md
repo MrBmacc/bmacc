@@ -29,41 +29,6 @@ BMACC is a decentralized application (dApp) that enables creators and content pr
   - Framer Motion
   - Lucide React icons
 
-## 🏗 Project Structure
-
-The project follows a modern React application structure with TypeScript support:
-
-├── public/
-│ ├── images/
-│ │ └── bmacc-logo.png
-│ └── redirects
-├── src/
-│ ├── assets/
-│ │ └── bmacc-character-in-room.png
-│ ├── components/
-│ │ ├── ui/
-│ │ ├── page-landing.tsx
-│ │ ├── provider-appkit.tsx
-│ │ └── section-testimonials.tsx
-│ ├── config/
-│ │ └── abi/
-│ │ ├── cryptoTippingAbi.ts
-│ │ └── erc20.json
-│ ├── hooks/
-│ │ └── use-user-balance.ts
-│ ├── lib/
-│ │ ├── supabase.ts
-│ │ └── utils.ts
-│ ├── main.tsx
-│ └── router.ts
-├── index.html
-├── package.json
-├── tsconfig.json
-├── tsconfig.app.json
-├── vite.config.ts
-├── tailwind.config.js
-└── components.json
-
 ## 🚦 Getting Started
 
 1. Clone the repository
