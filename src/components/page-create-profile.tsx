@@ -144,7 +144,7 @@ export function CreateProfile() {
 
       navigate({
         to: "/profile/$slug",
-        params: { slug: formData.username },
+        params: { slug: toUrlFriendly(formData.username) },
       });
     } catch (error) {
       console.error("Error creating profile:", error);
