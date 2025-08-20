@@ -19,8 +19,20 @@
   <meta property="og:type" content="website" />
 
   <!-- Farcaster Frame Tags -->
-  <meta name="fc:frame"
-    content='{"version":"next","imageUrl":"https://100msfireside-kolt.vercel.app/fireside_banner.png"%7D' />
+  <meta name="fc:frame" content='{
+    "version": "next",
+    "imageUrl": "https://100msfireside-kolt.vercel.app/fireside_banner.png",
+    "button": {
+      "title": "Tune in!",
+      "action": {
+        "type": "launch_frame",
+        "name": "Fireside 100ms",
+        "url": "http://localhost:3000",
+        "splashImageUrl": "https://100msfireside-kolt.vercel.app/fireside-logo.svg",
+        "splashBackgroundColor": "#000000"
+      }
+    }
+  }'>
 
   <title>BMACC</title>
 </head>
