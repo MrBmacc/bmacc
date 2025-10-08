@@ -105,14 +105,14 @@ export function EditProfileDialog({
   };
 
   return (
-    <Dialog>
+    <Dialog >
       <DialogTrigger asChild ref={closeRef}>
         <Button variant="outline">
           <Pencil className="w-4 h-4" />
           <span className="sr-only">Edit Profile</span>
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="">
         <DialogHeader>
           <DialogTitle>Edit Profile</DialogTitle>
         </DialogHeader>

@@ -3,7 +3,7 @@ import userImageDefault from "@/assets/default.jpg";
 
 export const CreatorHeader = ({ profile }: { profile: Profile }) => {
   return (
-    <div className="absolute inset-x-0 -top-12 mx-auto flex justify-center max-w-xs">
+    <div className="absolute inset-x-0 -top-12 mx-auto flex justify-center w-fit">
       <div className="flex flex-col items-center gap-2 relative animate-in zoom-in delay-100 fill-mode-both ease-in-out">
         <img
           src={profile.image_url || userImageDefault}
